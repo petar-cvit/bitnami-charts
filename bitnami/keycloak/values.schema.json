@@ -1,0 +1,2232 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "adminIngress": {
+      "additionalProperties": false,
+      "properties": {
+        "annotations": {
+          "additionalProperties": false,
+          "description": "## @param adminIngress.annotations [object] Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.\n## Use this parameter to set the required annotations for cert-manager, see\n## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations\n## e.g:\n## annotations:\n##   kubernetes.io/ingress.class: nginx\n##   cert-manager.io/cluster-issuer: cluster-issuer-name\n##",
+          "title": "annotations",
+          "type": "object"
+        },
+        "apiVersion": {
+          "default": "",
+          "description": "## @param adminIngress.apiVersion Force Ingress API version (automatically detected if not set)\n##",
+          "title": "apiVersion",
+          "type": "string"
+        },
+        "controller": {
+          "default": "default",
+          "description": "## @param adminIngress.controller The ingress controller type. Currently supports `default` and `gce`\n## leave as `default` for most ingress controllers.\n## set to `gce` if using the GCE ingress controller\n##",
+          "title": "controller",
+          "type": "string"
+        },
+        "enabled": {
+          "default": false,
+          "description": "## @param adminIngress.enabled Enable admin ingress record generation for Keycloak\n##",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "extraHosts": {
+          "items": {},
+          "description": "## @param adminIngress.extraHosts An array with additional hostname(s) to be covered with the admin ingress record\n## e.g:\n## extraHosts:\n##   - name: keycloak.local\n##     path: /\n##",
+          "title": "extraHosts",
+          "type": "array"
+        },
+        "extraPaths": {
+          "items": {},
+          "description": "## @param adminIngress.extraPaths Any additional arbitrary paths that may need to be added to the admin ingress under the main host.\n## For example: The ALB ingress controller requires a special rule for handling SSL redirection.\n## extraPaths:\n## - path: /*\n##   backend:\n##     serviceName: ssl-redirect\n##     servicePort: use-annotation\n##",
+          "title": "extraPaths",
+          "type": "array"
+        },
+        "extraRules": {
+          "items": {},
+          "description": "## @param adminIngress.extraRules Additional rules to be covered with this ingress record\n## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules\n## e.g:\n## extraRules:\n## - host: airflow.local\n##     http:\n##       path: /\n##       backend:\n##         service:\n##           name: airflow-svc\n##           port:\n##             name: http\n##",
+          "title": "extraRules",
+          "type": "array"
+        },
+        "extraTls": {
+          "items": {},
+          "description": "## @param adminIngress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.\n## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls\n## extraTls:\n## - hosts:\n##     - keycloak.local\n##   secretName: keycloak.local-tls\n##",
+          "title": "extraTls",
+          "type": "array"
+        },
+        "hostname": {
+          "default": "keycloak.local",
+          "description": "## @param adminIngress.hostname Default host for the admin ingress record (evaluated as template)\n##",
+          "title": "hostname",
+          "type": "string"
+        },
+        "ingressClassName": {
+          "default": "",
+          "description": "## @param adminIngress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)\n## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .\n## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/\n##",
+          "title": "ingressClassName",
+          "type": "string"
+        },
+        "labels": {
+          "additionalProperties": false,
+          "description": "## @param adminIngress.labels Additional labels for the Ingress resource.\n## e.g:\n## labels:\n##   app: keycloak\n##",
+          "title": "labels",
+          "type": "object"
+        },
+        "path": {
+          "default": "{{ .Values.httpRelativePath }}",
+          "description": "## @param adminIngress.path [string] Default path for the admin ingress record (evaluated as template)\n##",
+          "title": "path",
+          "type": "string"
+        },
+        "pathType": {
+          "default": "ImplementationSpecific",
+          "description": "## @param adminIngress.pathType Ingress path type\n##",
+          "title": "pathType",
+          "type": "string"
+        },
+        "secrets": {
+          "items": {},
+          "description": "## @param adminIngress.secrets If you're providing your own certificates, please use this to add the certificates as secrets\n## key and certificate should start with -----BEGIN CERTIFICATE----- or\n## -----BEGIN RSA PRIVATE KEY-----\n##\n## name should line up with a tlsSecret set further up\n## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set\n##\n## It is also possible to create and manage the certificates outside of this helm chart\n## Please see README.md for more information\n## e.g:\n## - name: keycloak.local-tls\n##   key:\n##   certificate:\n##",
+          "title": "secrets",
+          "type": "array"
+        },
+        "selfSigned": {
+          "default": false,
+          "description": "## @param adminIngress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm\n##",
+          "title": "selfSigned",
+          "type": "boolean"
+        },
+        "servicePort": {
+          "default": "http",
+          "description": "## @param adminIngress.servicePort Backend service port to use\n## Default is http. Alternative is https.\n##",
+          "title": "servicePort",
+          "type": "string"
+        },
+        "tls": {
+          "default": false,
+          "description": "## @param adminIngress.tls Enable TLS configuration for the host defined at `adminIngress.hostname` parameter\n## TLS certificates will be retrieved from a TLS secret with name: `{{- printf \"%s-tls\" (tpl .Values.adminIngress.hostname .) }}`\n## You can:\n##   - Use the `adminIngress.secrets` parameter to create this TLS secret\n##   - Rely on cert-manager to create it by setting the corresponding annotations\n##   - Rely on Helm to create self-signed certificates by setting `adminIngress.selfSigned=true`\n##",
+          "title": "tls",
+          "type": "boolean"
+        }
+      },
+      "description": "## Keycloak admin ingress parameters\n## ref: https://kubernetes.io/docs/user-guide/ingress/\n##",
+      "title": "adminIngress",
+      "type": "object"
+    },
+    "adminRealm": {
+      "default": "master",
+      "description": "## @param adminRealm Name of the admin realm\n##",
+      "title": "adminRealm",
+      "type": "string"
+    },
+    "affinity": {
+      "additionalProperties": false,
+      "description": "## @param affinity Affinity for pod assignment\n## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity\n##",
+      "title": "affinity",
+      "type": "object"
+    },
+    "args": {
+      "items": {},
+      "description": "## @param args Override default container args (useful when using custom images)\n##",
+      "title": "args",
+      "type": "array"
+    },
+    "auth": {
+      "additionalProperties": false,
+      "properties": {
+        "adminPassword": {
+          "default": "",
+          "description": "## @param auth.adminPassword Keycloak administrator password for the new user\n##",
+          "title": "adminPassword",
+          "type": "string"
+        },
+        "adminUser": {
+          "default": "user",
+          "description": "## @param auth.adminUser Keycloak administrator user\n##",
+          "title": "adminUser",
+          "type": "string"
+        },
+        "annotations": {
+          "additionalProperties": false,
+          "description": "## @param auth.annotations Additional custom annotations for Keycloak auth secret object\n##",
+          "title": "annotations",
+          "type": "object"
+        },
+        "existingSecret": {
+          "default": "",
+          "description": "## @param auth.existingSecret Existing secret containing Keycloak admin password\n##",
+          "title": "existingSecret",
+          "type": "string"
+        },
+        "passwordSecretKey": {
+          "default": "",
+          "description": "## @param auth.passwordSecretKey Key where the Keycloak admin password is being stored inside the existing secret.\n##",
+          "title": "passwordSecretKey",
+          "type": "string"
+        }
+      },
+      "description": "## Keycloak authentication parameters\n## ref: https://github.com/bitnami/containers/tree/main/bitnami/keycloak#admin-credentials\n##",
+      "title": "auth",
+      "type": "object"
+    },
+    "automountServiceAccountToken": {
+      "default": true,
+      "description": "## @param automountServiceAccountToken Mount Service Account token in pod\n##",
+      "title": "automountServiceAccountToken",
+      "type": "boolean"
+    },
+    "autoscaling": {
+      "additionalProperties": false,
+      "properties": {
+        "behavior": {
+          "additionalProperties": false,
+          "properties": {
+            "scaleDown": {
+              "additionalProperties": false,
+              "properties": {
+                "policies": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "additionalProperties": false,
+                        "properties": {
+                          "periodSeconds": {
+                            "default": 300,
+                            "title": "periodSeconds",
+                            "type": "integer"
+                          },
+                          "type": {
+                            "default": "Pods",
+                            "title": "type",
+                            "type": "string"
+                          },
+                          "value": {
+                            "default": 1,
+                            "title": "value",
+                            "type": "integer"
+                          }
+                        },
+                        "type": "object"
+                      }
+                    ]
+                  },
+                  "title": "policies",
+                  "type": "array"
+                },
+                "selectPolicy": {
+                  "default": "Max",
+                  "title": "selectPolicy",
+                  "type": "string"
+                },
+                "stabilizationWindowSeconds": {
+                  "default": 300,
+                  "title": "stabilizationWindowSeconds",
+                  "type": "integer"
+                }
+              },
+              "description": "## HPA behavior when scaling down\n## @param autoscaling.behavior.scaleDown.stabilizationWindowSeconds The number of seconds for which past recommendations should be considered while scaling down\n## @param autoscaling.behavior.scaleDown.selectPolicy The priority of policies that the autoscaler will apply when scaling down\n## @param autoscaling.behavior.scaleDown.policies [array] HPA scaling policies when scaling down\n## e.g:\n## Policy to scale one pod in 300s\n## - type: Pods\n##   value: 1\n##   periodSeconds: 300\n##",
+              "title": "scaleDown",
+              "type": "object"
+            },
+            "scaleUp": {
+              "additionalProperties": false,
+              "properties": {
+                "policies": {
+                  "items": {},
+                  "title": "policies",
+                  "type": "array"
+                },
+                "selectPolicy": {
+                  "default": "Max",
+                  "title": "selectPolicy",
+                  "type": "string"
+                },
+                "stabilizationWindowSeconds": {
+                  "default": 120,
+                  "title": "stabilizationWindowSeconds",
+                  "type": "integer"
+                }
+              },
+              "description": "## HPA behavior when scaling up\n## @param autoscaling.behavior.scaleUp.stabilizationWindowSeconds The number of seconds for which past recommendations should be considered while scaling up\n## @param autoscaling.behavior.scaleUp.selectPolicy The priority of policies that the autoscaler will apply when scaling up\n## @param autoscaling.behavior.scaleUp.policies [array] HPA scaling policies when scaling up\n## e.g:\n## Policy to scale 20% of the pod in 60s\n## - type: Percent\n##   value: 20\n##   periodSeconds: 60\n##",
+              "title": "scaleUp",
+              "type": "object"
+            }
+          },
+          "description": "## HPA Scaling Behavior\n## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#configurable-scaling-behavior\n##",
+          "title": "behavior",
+          "type": "object"
+        },
+        "enabled": {
+          "default": false,
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "maxReplicas": {
+          "default": 11,
+          "title": "maxReplicas",
+          "type": "integer"
+        },
+        "minReplicas": {
+          "default": 1,
+          "title": "minReplicas",
+          "type": "integer"
+        },
+        "targetCPU": {
+          "default": "",
+          "title": "targetCPU",
+          "type": "string"
+        },
+        "targetMemory": {
+          "default": "",
+          "title": "targetMemory",
+          "type": "string"
+        }
+      },
+      "description": "## Keycloak Autoscaling configuration\n## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/\n## @param autoscaling.enabled Enable autoscaling for Keycloak\n## @param autoscaling.minReplicas Minimum number of Keycloak replicas\n## @param autoscaling.maxReplicas Maximum number of Keycloak replicas\n## @param autoscaling.targetCPU Target CPU utilization percentage\n## @param autoscaling.targetMemory Target Memory utilization percentage\n##",
+      "title": "autoscaling",
+      "type": "object"
+    },
+    "cache": {
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "default": true,
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "stackFile": {
+          "default": "",
+          "title": "stackFile",
+          "type": "string"
+        },
+        "stackName": {
+          "default": "kubernetes",
+          "title": "stackName",
+          "type": "string"
+        }
+      },
+      "description": "## Keycloak cache configuration\n## ref: https://www.keycloak.org/server/caching\n## @param cache.enabled Switch to enable or disable the keycloak distributed cache for kubernetes.\n## NOTE: Set to false to use 'local' cache (only supported when replicaCount=1).\n## @param cache.stackName Set infinispan cache stack to use\n## @param cache.stackFile Set infinispan cache stack filename to use\n##",
+      "title": "cache",
+      "type": "object"
+    },
+    "clusterDomain": {
+      "default": "cluster.local",
+      "description": "## @param clusterDomain Default Kubernetes cluster domain\n##",
+      "title": "clusterDomain",
+      "type": "string"
+    },
+    "command": {
+      "items": {},
+      "description": "## @param command Override default container command (useful when using custom images)\n##",
+      "title": "command",
+      "type": "array"
+    },
+    "commonAnnotations": {
+      "additionalProperties": false,
+      "description": "## @param commonAnnotations Annotations to add to all deployed objects\n##",
+      "title": "commonAnnotations",
+      "type": "object"
+    },
+    "commonLabels": {
+      "additionalProperties": false,
+      "description": "## @param commonLabels Labels to add to all deployed objects\n##",
+      "title": "commonLabels",
+      "type": "object"
+    },
+    "configuration": {
+      "default": "",
+      "description": "## Keycloak Service Discovery settings\n## ref: https://github.com/bitnami/containers/tree/main/bitnami/keycloak#cluster-configuration\n##\n## @param configuration Keycloak Configuration. Auto-generated based on other parameters when not specified\n## Specify content for keycloak.conf\n## NOTE: This will override configuring Keycloak based on environment variables (including those set by the chart)\n## The keycloak.conf is auto-generated based on other parameters when this parameter is not specified\n##\n## Example:\n## configuration: |-\n##    foo: bar\n##    baz:\n##",
+      "title": "configuration",
+      "type": "string"
+    },
+    "containerPorts": {
+      "additionalProperties": false,
+      "properties": {
+        "http": {
+          "default": 8080,
+          "title": "http",
+          "type": "integer"
+        },
+        "https": {
+          "default": 8443,
+          "title": "https",
+          "type": "integer"
+        }
+      },
+      "description": "## @param containerPorts.http Keycloak HTTP container port\n## @param containerPorts.https Keycloak HTTPS container port\n##",
+      "title": "containerPorts",
+      "type": "object"
+    },
+    "containerSecurityContext": {
+      "additionalProperties": false,
+      "properties": {
+        "allowPrivilegeEscalation": {
+          "default": false,
+          "title": "allowPrivilegeEscalation",
+          "type": "boolean"
+        },
+        "capabilities": {
+          "additionalProperties": false,
+          "properties": {
+            "drop": {
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "title": "drop",
+              "type": "array"
+            }
+          },
+          "title": "capabilities",
+          "type": "object"
+        },
+        "enabled": {
+          "default": true,
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "privileged": {
+          "default": false,
+          "title": "privileged",
+          "type": "boolean"
+        },
+        "readOnlyRootFilesystem": {
+          "default": true,
+          "title": "readOnlyRootFilesystem",
+          "type": "boolean"
+        },
+        "runAsGroup": {
+          "default": 1001,
+          "title": "runAsGroup",
+          "type": "integer"
+        },
+        "runAsNonRoot": {
+          "default": true,
+          "title": "runAsNonRoot",
+          "type": "boolean"
+        },
+        "runAsUser": {
+          "default": 1001,
+          "title": "runAsUser",
+          "type": "integer"
+        },
+        "seLinuxOptions": {
+          "additionalProperties": false,
+          "title": "seLinuxOptions",
+          "type": "object"
+        },
+        "seccompProfile": {
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "default": "RuntimeDefault",
+              "title": "type",
+              "type": "string"
+            }
+          },
+          "title": "seccompProfile",
+          "type": "object"
+        }
+      },
+      "description": "## Keycloak containers' Security Context\n## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container\n## @param containerSecurityContext.enabled Enabled containers' Security Context\n## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container\n## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser\n## @param containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup\n## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot\n## @param containerSecurityContext.privileged Set container's Security Context privileged\n## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem\n## @param containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation\n## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped\n## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile\n##",
+      "title": "containerSecurityContext",
+      "type": "object"
+    },
+    "customCaExistingSecret": {
+      "default": "",
+      "description": "## Custom Certificates\n## @param customCaExistingSecret Name of the secret containing the Keycloak custom CA certificates. The secret will be mounted as a directory and configured using KC_TRUSTSTORE_PATHS.\n## https://www.keycloak.org/server/keycloak-truststore\n## Could be created like this: kubectl create secret generic secretName --from-file=./certificateToMerge.pem",
+      "title": "customCaExistingSecret",
+      "type": "string"
+    },
+    "customLivenessProbe": {
+      "additionalProperties": false,
+      "description": "## @param customLivenessProbe Custom Liveness probes for Keycloak\n##",
+      "title": "customLivenessProbe",
+      "type": "object"
+    },
+    "customReadinessProbe": {
+      "additionalProperties": false,
+      "description": "## @param customReadinessProbe Custom Rediness probes Keycloak\n##",
+      "title": "customReadinessProbe",
+      "type": "object"
+    },
+    "customStartupProbe": {
+      "additionalProperties": false,
+      "description": "## @param customStartupProbe Custom Startup probes for Keycloak\n##",
+      "title": "customStartupProbe",
+      "type": "object"
+    },
+    "diagnosticMode": {
+      "additionalProperties": false,
+      "properties": {
+        "args": {
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "description": "## @param diagnosticMode.args Args to override all containers in the the statefulset\n##",
+          "title": "args",
+          "type": "array"
+        },
+        "command": {
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "description": "## @param diagnosticMode.command Command to override all containers in the the statefulset\n##",
+          "title": "command",
+          "type": "array"
+        },
+        "enabled": {
+          "default": false,
+          "description": "## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)\n##",
+          "title": "enabled",
+          "type": "boolean"
+        }
+      },
+      "description": "## Enable diagnostic mode in the statefulset\n##",
+      "title": "diagnosticMode",
+      "type": "object"
+    },
+    "dnsConfig": {
+      "additionalProperties": false,
+      "description": "## @param dnsConfig DNS Configuration pod\n## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/\n## E.g.\n## dnsConfig:\n##   options:\n##   - name: ndots\n##     value: \"4\"",
+      "title": "dnsConfig",
+      "type": "object"
+    },
+    "dnsPolicy": {
+      "default": "",
+      "description": "## @param dnsPolicy DNS Policy for pod\n## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/\n## E.g.\n## dnsPolicy: ClusterFirst",
+      "title": "dnsPolicy",
+      "type": "string"
+    },
+    "enableDefaultInitContainers": {
+      "default": true,
+      "description": "## @param enableDefaultInitContainers Deploy default init containers\n## Disable this parameter could be helpful for 3rd party images e.g native Keycloak image.\n##",
+      "title": "enableDefaultInitContainers",
+      "type": "boolean"
+    },
+    "enableServiceLinks": {
+      "default": true,
+      "description": "## @param enableServiceLinks If set to false, disable Kubernetes service links in the pod spec\n## Ref: https://kubernetes.io/docs/tutorials/services/connect-applications-service/#accessing-the-service\n##",
+      "title": "enableServiceLinks",
+      "type": "boolean"
+    },
+    "existingConfigmap": {
+      "default": "",
+      "description": "## @param existingConfigmap Name of existing ConfigMap with Keycloak configuration\n## NOTE: When it's set the configuration parameter is ignored\n##",
+      "title": "existingConfigmap",
+      "type": "string"
+    },
+    "externalDatabase": {
+      "additionalProperties": false,
+      "properties": {
+        "annotations": {
+          "additionalProperties": false,
+          "title": "annotations",
+          "type": "object"
+        },
+        "database": {
+          "default": "bitnami_keycloak",
+          "title": "database",
+          "type": "string"
+        },
+        "existingSecret": {
+          "default": "",
+          "title": "existingSecret",
+          "type": "string"
+        },
+        "existingSecretDatabaseKey": {
+          "default": "",
+          "title": "existingSecretDatabaseKey",
+          "type": "string"
+        },
+        "existingSecretHostKey": {
+          "default": "",
+          "title": "existingSecretHostKey",
+          "type": "string"
+        },
+        "existingSecretPasswordKey": {
+          "default": "",
+          "title": "existingSecretPasswordKey",
+          "type": "string"
+        },
+        "existingSecretPortKey": {
+          "default": "",
+          "title": "existingSecretPortKey",
+          "type": "string"
+        },
+        "existingSecretUserKey": {
+          "default": "",
+          "title": "existingSecretUserKey",
+          "type": "string"
+        },
+        "host": {
+          "default": "",
+          "title": "host",
+          "type": "string"
+        },
+        "password": {
+          "default": "",
+          "title": "password",
+          "type": "string"
+        },
+        "port": {
+          "default": 5432,
+          "title": "port",
+          "type": "integer"
+        },
+        "user": {
+          "default": "bn_keycloak",
+          "title": "user",
+          "type": "string"
+        }
+      },
+      "description": "## External PostgreSQL configuration\n## All of these values are only used when postgresql.enabled is set to false\n## @param externalDatabase.host Database host\n## @param externalDatabase.port Database port number\n## @param externalDatabase.user Non-root username for Keycloak\n## @param externalDatabase.password Password for the non-root username for Keycloak\n## @param externalDatabase.database Keycloak database name\n## @param externalDatabase.existingSecret Name of an existing secret resource containing the database credentials\n## @param externalDatabase.existingSecretHostKey Name of an existing secret key containing the database host name\n## @param externalDatabase.existingSecretPortKey Name of an existing secret key containing the database port\n## @param externalDatabase.existingSecretUserKey Name of an existing secret key containing the database user\n## @param externalDatabase.existingSecretDatabaseKey Name of an existing secret key containing the database name\n## @param externalDatabase.existingSecretPasswordKey Name of an existing secret key containing the database credentials\n## @param externalDatabase.annotations Additional custom annotations for external database secret object\n##",
+      "title": "externalDatabase",
+      "type": "object"
+    },
+    "extraContainerPorts": {
+      "items": {},
+      "description": "## @param extraContainerPorts Optionally specify extra list of additional port-mappings for Keycloak container\n##",
+      "title": "extraContainerPorts",
+      "type": "array"
+    },
+    "extraDeploy": {
+      "items": {},
+      "description": "## @param extraDeploy Array of extra objects to deploy with the release\n##",
+      "title": "extraDeploy",
+      "type": "array"
+    },
+    "extraEnvVars": {
+      "items": {},
+      "description": "## @param extraEnvVars Extra environment variables to be set on Keycloak container\n## Example:\n## extraEnvVars:\n##   - name: FOO\n##     value: \"bar\"\n##",
+      "title": "extraEnvVars",
+      "type": "array"
+    },
+    "extraEnvVarsCM": {
+      "default": "",
+      "description": "## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars\n##",
+      "title": "extraEnvVarsCM",
+      "type": "string"
+    },
+    "extraEnvVarsSecret": {
+      "default": "",
+      "description": "## @param extraEnvVarsSecret Name of existing Secret containing extra env vars\n##",
+      "title": "extraEnvVarsSecret",
+      "type": "string"
+    },
+    "extraStartupArgs": {
+      "default": "",
+      "description": "## @param extraStartupArgs Extra default startup args\n##",
+      "title": "extraStartupArgs",
+      "type": "string"
+    },
+    "extraVolumeMounts": {
+      "items": {},
+      "description": "## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for Keycloak container(s)\n##",
+      "title": "extraVolumeMounts",
+      "type": "array"
+    },
+    "extraVolumes": {
+      "items": {},
+      "description": "## @param extraVolumes Optionally specify extra list of additional volumes for Keycloak pods\n##",
+      "title": "extraVolumes",
+      "type": "array"
+    },
+    "fullnameOverride": {
+      "default": "",
+      "description": "## @param fullnameOverride String to fully override common.names.fullname\n##",
+      "title": "fullnameOverride",
+      "type": "string"
+    },
+    "global": {
+      "additionalProperties": false,
+      "properties": {
+        "compatibility": {
+          "additionalProperties": false,
+          "properties": {
+            "openshift": {
+              "additionalProperties": false,
+              "properties": {
+                "adaptSecurityContext": {
+                  "default": "auto",
+                  "description": "## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)\n##",
+                  "title": "adaptSecurityContext",
+                  "type": "string"
+                }
+              },
+              "description": "## Compatibility adaptations for Openshift\n##",
+              "title": "openshift",
+              "type": "object"
+            }
+          },
+          "description": "## Compatibility adaptations for Kubernetes platforms\n##",
+          "title": "compatibility",
+          "type": "object"
+        },
+        "defaultStorageClass": {
+          "default": "",
+          "title": "defaultStorageClass",
+          "type": "string"
+        },
+        "imagePullSecrets": {
+          "items": {},
+          "description": "## E.g.\n## imagePullSecrets:\n##   - myRegistryKeySecretName\n##",
+          "title": "imagePullSecrets",
+          "type": "array"
+        },
+        "imageRegistry": {
+          "default": "",
+          "title": "imageRegistry",
+          "type": "string"
+        },
+        "storageClass": {
+          "default": "",
+          "title": "storageClass",
+          "type": "string"
+        }
+      },
+      "description": "## @param global.imageRegistry Global Docker image registry\n## @param global.imagePullSecrets Global Docker registry secret names as an array\n## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)\n## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead\n##",
+      "title": "global",
+      "type": "object"
+    },
+    "hostAliases": {
+      "items": {},
+      "description": "## @param hostAliases Deployment pod host aliases\n## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/\n##",
+      "title": "hostAliases",
+      "type": "array"
+    },
+    "httpRelativePath": {
+      "default": "/",
+      "description": "## @param httpRelativePath Set the path relative to '/' for serving resources. Useful if you are migrating from older version which were using '/auth/'\n## ref: https://www.keycloak.org/migration/migrating-to-quarkus#_default_context_path_changed\n##",
+      "title": "httpRelativePath",
+      "type": "string"
+    },
+    "image": {
+      "additionalProperties": false,
+      "properties": {
+        "debug": {
+          "default": false,
+          "description": "## Set to true if you would like to see extra information on logs\n##",
+          "title": "debug",
+          "type": "boolean"
+        },
+        "digest": {
+          "default": "",
+          "title": "digest",
+          "type": "string"
+        },
+        "pullPolicy": {
+          "default": "IfNotPresent",
+          "description": "## Specify a imagePullPolicy\n## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'\n## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images\n##",
+          "title": "pullPolicy",
+          "type": "string"
+        },
+        "pullSecrets": {
+          "items": {},
+          "description": "## Optionally specify an array of imagePullSecrets.\n## Secrets must be manually created in the namespace.\n## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/\n## Example:\n## pullSecrets:\n##   - myRegistryKeySecretName\n##",
+          "title": "pullSecrets",
+          "type": "array"
+        },
+        "registry": {
+          "default": "docker.io",
+          "title": "registry",
+          "type": "string"
+        },
+        "repository": {
+          "default": "bitnami/keycloak",
+          "title": "repository",
+          "type": "string"
+        },
+        "tag": {
+          "default": "25.0.4-debian-12-r1",
+          "title": "tag",
+          "type": "string"
+        }
+      },
+      "description": "## Bitnami Keycloak image version\n## ref: https://hub.docker.com/r/bitnami/keycloak/tags/\n## @param image.registry [default: REGISTRY_NAME] Keycloak image registry\n## @param image.repository [default: REPOSITORY_NAME/keycloak] Keycloak image repository\n## @skip image.tag Keycloak image tag (immutable tags are recommended)\n## @param image.digest Keycloak image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag\n## @param image.pullPolicy Keycloak image pull policy\n## @param image.pullSecrets Specify docker-registry secret names as an array\n## @param image.debug Specify if debug logs should be enabled\n##",
+      "title": "image",
+      "type": "object"
+    },
+    "ingress": {
+      "additionalProperties": false,
+      "properties": {
+        "annotations": {
+          "additionalProperties": false,
+          "description": "## @param ingress.annotations [object] Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.\n## Use this parameter to set the required annotations for cert-manager, see\n## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations\n## e.g:\n## annotations:\n##   kubernetes.io/ingress.class: nginx\n##   cert-manager.io/cluster-issuer: cluster-issuer-name\n##",
+          "title": "annotations",
+          "type": "object"
+        },
+        "apiVersion": {
+          "default": "",
+          "description": "## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)\n##",
+          "title": "apiVersion",
+          "type": "string"
+        },
+        "controller": {
+          "default": "default",
+          "description": "## @param ingress.controller The ingress controller type. Currently supports `default` and `gce`\n## leave as `default` for most ingress controllers.\n## set to `gce` if using the GCE ingress controller\n##",
+          "title": "controller",
+          "type": "string"
+        },
+        "enabled": {
+          "default": false,
+          "description": "## @param ingress.enabled Enable ingress record generation for Keycloak\n##",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "extraHosts": {
+          "items": {},
+          "description": "## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record\n## e.g:\n## extraHosts:\n##   - name: keycloak.local\n##     path: /\n##",
+          "title": "extraHosts",
+          "type": "array"
+        },
+        "extraPaths": {
+          "items": {},
+          "description": "## @param ingress.extraPaths Any additional arbitrary paths that may need to be added to the ingress under the main host.\n## For example: The ALB ingress controller requires a special rule for handling SSL redirection.\n## extraPaths:\n## - path: /*\n##   backend:\n##     serviceName: ssl-redirect\n##     servicePort: use-annotation\n##",
+          "title": "extraPaths",
+          "type": "array"
+        },
+        "extraRules": {
+          "items": {},
+          "description": "## @param ingress.extraRules Additional rules to be covered with this ingress record\n## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules\n## e.g:\n## extraRules:\n## - host: airflow.local\n##     http:\n##       path: /\n##       backend:\n##         service:\n##           name: airflow-svc\n##           port:\n##             name: http\n##",
+          "title": "extraRules",
+          "type": "array"
+        },
+        "extraTls": {
+          "items": {},
+          "description": "## @param ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.\n## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls\n## extraTls:\n## - hosts:\n##     - keycloak.local\n##   secretName: keycloak.local-tls\n##",
+          "title": "extraTls",
+          "type": "array"
+        },
+        "hostname": {
+          "default": "keycloak.local",
+          "description": "## @param ingress.hostname Default host for the ingress record (evaluated as template)\n##",
+          "title": "hostname",
+          "type": "string"
+        },
+        "hostnameStrict": {
+          "default": false,
+          "description": "## @param ingress.hostnameStrict Disables dynamically resolving the hostname from request headers.\n## Should always be set to true in production, unless your reverse proxy overwrites the Host header.\n## If enabled, the hostname option needs to be specified.\n##",
+          "title": "hostnameStrict",
+          "type": "boolean"
+        },
+        "ingressClassName": {
+          "default": "",
+          "description": "## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)\n## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .\n## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/\n##",
+          "title": "ingressClassName",
+          "type": "string"
+        },
+        "labels": {
+          "additionalProperties": false,
+          "description": "## @param ingress.labels Additional labels for the Ingress resource.\n## e.g:\n## labels:\n##   app: keycloak\n##",
+          "title": "labels",
+          "type": "object"
+        },
+        "path": {
+          "default": "{{ .Values.httpRelativePath }}",
+          "description": "## @param ingress.path [string] Default path for the ingress record (evaluated as template)\n##",
+          "title": "path",
+          "type": "string"
+        },
+        "pathType": {
+          "default": "ImplementationSpecific",
+          "description": "## @param ingress.pathType Ingress path type\n##",
+          "title": "pathType",
+          "type": "string"
+        },
+        "secrets": {
+          "items": {},
+          "description": "## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets\n## key and certificate should start with -----BEGIN CERTIFICATE----- or\n## -----BEGIN RSA PRIVATE KEY-----\n##\n## name should line up with a tlsSecret set further up\n## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set\n##\n## It is also possible to create and manage the certificates outside of this helm chart\n## Please see README.md for more information\n## e.g:\n## - name: keycloak.local-tls\n##   key:\n##   certificate:\n##",
+          "title": "secrets",
+          "type": "array"
+        },
+        "selfSigned": {
+          "default": false,
+          "description": "## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm\n##",
+          "title": "selfSigned",
+          "type": "boolean"
+        },
+        "servicePort": {
+          "default": "http",
+          "description": "## @param ingress.servicePort Backend service port to use\n## Default is http. Alternative is https.\n##",
+          "title": "servicePort",
+          "type": "string"
+        },
+        "tls": {
+          "default": false,
+          "description": "## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter\n## TLS certificates will be retrieved from a TLS secret with name: `{{- printf \"%s-tls\" (tpl .Values.ingress.hostname .) }}`\n## You can:\n##   - Use the `ingress.secrets` parameter to create this TLS secret\n##   - Rely on cert-manager to create it by setting the corresponding annotations\n##   - Rely on Helm to create self-signed certificates by setting `ingress.selfSigned=true`\n##",
+          "title": "tls",
+          "type": "boolean"
+        }
+      },
+      "description": "## Keycloak ingress parameters\n## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/\n##",
+      "title": "ingress",
+      "type": "object"
+    },
+    "initContainers": {
+      "items": {},
+      "description": "## @param initContainers Add additional init containers to the Keycloak pods\n## Example:\n## initContainers:\n##   - name: your-image-name\n##     image: your-image\n##     imagePullPolicy: Always\n##     ports:\n##       - name: portname\n##         containerPort: 1234\n##",
+      "title": "initContainers",
+      "type": "array"
+    },
+    "initdbScripts": {
+      "additionalProperties": false,
+      "description": "## @param initdbScripts Dictionary of initdb scripts\n## Specify dictionary of scripts to be run at first boot\n## ref: https://github.com/bitnami/containers/tree/main/bitnami/keycloak#initializing-a-new-instance\n## Example:\n## initdbScripts:\n##   my_init_script.sh: |\n##      #!/bin/bash\n##      echo \"Do something.\"\n##",
+      "title": "initdbScripts",
+      "type": "object"
+    },
+    "initdbScriptsConfigMap": {
+      "default": "",
+      "description": "## @param initdbScriptsConfigMap ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)\n##",
+      "title": "initdbScriptsConfigMap",
+      "type": "string"
+    },
+    "keycloakConfigCli": {
+      "additionalProperties": false,
+      "properties": {
+        "annotations": {
+          "additionalProperties": false,
+          "properties": {
+            "helm.sh/hook": {
+              "default": "post-install,post-upgrade,post-rollback",
+              "title": "helm.sh/hook",
+              "type": "string"
+            },
+            "helm.sh/hook-delete-policy": {
+              "default": "hook-succeeded,before-hook-creation",
+              "title": "helm.sh/hook-delete-policy",
+              "type": "string"
+            },
+            "helm.sh/hook-weight": {
+              "default": "5",
+              "title": "helm.sh/hook-weight",
+              "type": "string"
+            }
+          },
+          "description": "## @param keycloakConfigCli.annotations [object] Annotations for keycloak-config-cli job\n## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/\n##",
+          "title": "annotations",
+          "type": "object"
+        },
+        "args": {
+          "items": {},
+          "description": "## @param keycloakConfigCli.args Args for running the container (set to default if not set). Use array form\n##",
+          "title": "args",
+          "type": "array"
+        },
+        "automountServiceAccountToken": {
+          "default": true,
+          "description": "## @param keycloakConfigCli.automountServiceAccountToken Mount Service Account token in pod\n##",
+          "title": "automountServiceAccountToken",
+          "type": "boolean"
+        },
+        "backoffLimit": {
+          "default": 1,
+          "description": "## @param keycloakConfigCli.backoffLimit Number of retries before considering a Job as failed\n## ref: https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy\n##",
+          "title": "backoffLimit",
+          "type": "integer"
+        },
+        "cleanupAfterFinished": {
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {
+              "default": false,
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "seconds": {
+              "default": 600,
+              "title": "seconds",
+              "type": "integer"
+            }
+          },
+          "description": "## Automatic Cleanup for Finished Jobs\n## @param keycloakConfigCli.cleanupAfterFinished.enabled Enables Cleanup for Finished Jobs\n## @param keycloakConfigCli.cleanupAfterFinished.seconds Sets the value of ttlSecondsAfterFinished\n## ref: https://kubernetes.io/docs/concepts/workloads/controllers/ttlafterfinished/\n##",
+          "title": "cleanupAfterFinished",
+          "type": "object"
+        },
+        "command": {
+          "items": {},
+          "description": "## @param keycloakConfigCli.command Command for running the container (set to default if not set). Use array form\n##",
+          "title": "command",
+          "type": "array"
+        },
+        "configuration": {
+          "additionalProperties": false,
+          "description": "## @param keycloakConfigCli.configuration keycloak-config-cli realms configuration\n## NOTE: nil keys will be considered files to import locally\n## Example:\n## configuration:\n##   realm1.json: |\n##     {\n##       \"realm\": \"realm1\",\n##       \"clients\": []\n##     }\n##   realm2.yaml: |\n##     realm: realm2\n##     clients: []\n##",
+          "title": "configuration",
+          "type": "object"
+        },
+        "containerSecurityContext": {
+          "additionalProperties": false,
+          "properties": {
+            "allowPrivilegeEscalation": {
+              "default": false,
+              "title": "allowPrivilegeEscalation",
+              "type": "boolean"
+            },
+            "capabilities": {
+              "additionalProperties": false,
+              "properties": {
+                "drop": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "title": "drop",
+                  "type": "array"
+                }
+              },
+              "title": "capabilities",
+              "type": "object"
+            },
+            "enabled": {
+              "default": true,
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "privileged": {
+              "default": false,
+              "title": "privileged",
+              "type": "boolean"
+            },
+            "readOnlyRootFilesystem": {
+              "default": true,
+              "title": "readOnlyRootFilesystem",
+              "type": "boolean"
+            },
+            "runAsGroup": {
+              "default": 1001,
+              "title": "runAsGroup",
+              "type": "integer"
+            },
+            "runAsNonRoot": {
+              "default": true,
+              "title": "runAsNonRoot",
+              "type": "boolean"
+            },
+            "runAsUser": {
+              "default": 1001,
+              "title": "runAsUser",
+              "type": "integer"
+            },
+            "seLinuxOptions": {
+              "additionalProperties": false,
+              "title": "seLinuxOptions",
+              "type": "object"
+            },
+            "seccompProfile": {
+              "additionalProperties": false,
+              "properties": {
+                "type": {
+                  "default": "RuntimeDefault",
+                  "title": "type",
+                  "type": "string"
+                }
+              },
+              "title": "seccompProfile",
+              "type": "object"
+            }
+          },
+          "description": "## keycloak-config-cli containers' Security Context\n## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container\n## @param keycloakConfigCli.containerSecurityContext.enabled Enabled keycloak-config-cli Security Context\n## @param keycloakConfigCli.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container\n## @param keycloakConfigCli.containerSecurityContext.runAsUser Set keycloak-config-cli Security Context runAsUser\n## @param keycloakConfigCli.containerSecurityContext.runAsGroup Set keycloak-config-cli Security Context runAsGroup\n## @param keycloakConfigCli.containerSecurityContext.runAsNonRoot Set keycloak-config-cli Security Context runAsNonRoot\n## @param keycloakConfigCli.containerSecurityContext.privileged Set keycloak-config-cli Security Context privileged\n## @param keycloakConfigCli.containerSecurityContext.readOnlyRootFilesystem Set keycloak-config-cli Security Context readOnlyRootFilesystem\n## @param keycloakConfigCli.containerSecurityContext.allowPrivilegeEscalation Set keycloak-config-cli Security Context allowPrivilegeEscalation\n## @param keycloakConfigCli.containerSecurityContext.capabilities.drop List of capabilities to be dropped\n## @param keycloakConfigCli.containerSecurityContext.seccompProfile.type Set keycloak-config-cli Security Context seccomp profile\n##",
+          "title": "containerSecurityContext",
+          "type": "object"
+        },
+        "enabled": {
+          "default": false,
+          "description": "## @param keycloakConfigCli.enabled Whether to enable keycloak-config-cli job\n##",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "existingConfigmap": {
+          "default": "",
+          "description": "## @param keycloakConfigCli.existingConfigmap ConfigMap with keycloak-config-cli configuration\n## NOTE: This will override keycloakConfigCli.configuration\n##",
+          "title": "existingConfigmap",
+          "type": "string"
+        },
+        "extraEnvVars": {
+          "items": {},
+          "title": "extraEnvVars",
+          "type": "array"
+        },
+        "extraEnvVarsCM": {
+          "default": "",
+          "description": "## @param keycloakConfigCli.extraEnvVarsCM ConfigMap with extra environment variables\n##",
+          "title": "extraEnvVarsCM",
+          "type": "string"
+        },
+        "extraEnvVarsSecret": {
+          "default": "",
+          "description": "## @param keycloakConfigCli.extraEnvVarsSecret Secret with extra environment variables\n##",
+          "title": "extraEnvVarsSecret",
+          "type": "string"
+        },
+        "extraVolumeMounts": {
+          "items": {},
+          "description": "## @param keycloakConfigCli.extraVolumeMounts Extra volume mounts to add to the container\n##",
+          "title": "extraVolumeMounts",
+          "type": "array"
+        },
+        "extraVolumes": {
+          "items": {},
+          "description": "## @param keycloakConfigCli.extraVolumes Extra volumes to add to the job\n##",
+          "title": "extraVolumes",
+          "type": "array"
+        },
+        "hostAliases": {
+          "items": {},
+          "description": "## @param keycloakConfigCli.hostAliases Job pod host aliases\n## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/\n##",
+          "title": "hostAliases",
+          "type": "array"
+        },
+        "image": {
+          "additionalProperties": false,
+          "properties": {
+            "digest": {
+              "default": "",
+              "title": "digest",
+              "type": "string"
+            },
+            "pullPolicy": {
+              "default": "IfNotPresent",
+              "description": "## Specify a imagePullPolicy\n## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'\n## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images\n##",
+              "title": "pullPolicy",
+              "type": "string"
+            },
+            "pullSecrets": {
+              "items": {},
+              "description": "## Optionally specify an array of imagePullSecrets.\n## Secrets must be manually created in the namespace.\n## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/\n## e.g:\n## pullSecrets:\n##   - myRegistryKeySecretName\n##",
+              "title": "pullSecrets",
+              "type": "array"
+            },
+            "registry": {
+              "default": "docker.io",
+              "title": "registry",
+              "type": "string"
+            },
+            "repository": {
+              "default": "bitnami/keycloak-config-cli",
+              "title": "repository",
+              "type": "string"
+            },
+            "tag": {
+              "default": "6.1.6-debian-12-r0",
+              "title": "tag",
+              "type": "string"
+            }
+          },
+          "description": "## Bitnami keycloak-config-cli image\n## ref: https://hub.docker.com/r/bitnami/keycloak-config-cli/tags/\n## @param keycloakConfigCli.image.registry [default: REGISTRY_NAME] keycloak-config-cli container image registry\n## @param keycloakConfigCli.image.repository [default: REPOSITORY_NAME/keycloak-config-cli] keycloak-config-cli container image repository\n## @skip keycloakConfigCli.image.tag keycloak-config-cli container image tag\n## @param keycloakConfigCli.image.digest keycloak-config-cli container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag\n## @param keycloakConfigCli.image.pullPolicy keycloak-config-cli container image pull policy\n## @param keycloakConfigCli.image.pullSecrets keycloak-config-cli container image pull secrets\n##",
+          "title": "image",
+          "type": "object"
+        },
+        "initContainers": {
+          "items": {},
+          "description": "## @param keycloakConfigCli.initContainers Add additional init containers to the Keycloak config cli pod\n## Example:\n## initContainers:\n##   - name: your-image-name\n##     image: your-image\n##     imagePullPolicy: Always\n##     ports:\n##       - name: portname\n##         containerPort: 1234\n##",
+          "title": "initContainers",
+          "type": "array"
+        },
+        "nodeSelector": {
+          "additionalProperties": false,
+          "description": "## @param keycloakConfigCli.extraEnvVars Additional environment variables to set\n## Example:\n## extraEnvVars:\n##   - name: FOO\n##     value: \"bar\"\n##\n## @param keycloakConfigCli.nodeSelector Node labels for pod assignment\n## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/\n##",
+          "title": "nodeSelector",
+          "type": "object"
+        },
+        "podAnnotations": {
+          "additionalProperties": false,
+          "description": "## @param keycloakConfigCli.podAnnotations Annotations for job pod\n## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/\n##",
+          "title": "podAnnotations",
+          "type": "object"
+        },
+        "podLabels": {
+          "additionalProperties": false,
+          "description": "## @param keycloakConfigCli.podLabels Pod extra labels\n## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/\n##",
+          "title": "podLabels",
+          "type": "object"
+        },
+        "podSecurityContext": {
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {
+              "default": true,
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "fsGroup": {
+              "default": 1001,
+              "title": "fsGroup",
+              "type": "integer"
+            },
+            "fsGroupChangePolicy": {
+              "default": "Always",
+              "title": "fsGroupChangePolicy",
+              "type": "string"
+            },
+            "supplementalGroups": {
+              "items": {},
+              "title": "supplementalGroups",
+              "type": "array"
+            },
+            "sysctls": {
+              "items": {},
+              "title": "sysctls",
+              "type": "array"
+            }
+          },
+          "description": "## keycloak-config-cli pods' Security Context\n## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod\n## @param keycloakConfigCli.podSecurityContext.enabled Enabled keycloak-config-cli pods' Security Context\n## @param keycloakConfigCli.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy\n## @param keycloakConfigCli.podSecurityContext.sysctls Set kernel settings using the sysctl interface\n## @param keycloakConfigCli.podSecurityContext.supplementalGroups Set filesystem extra groups\n## @param keycloakConfigCli.podSecurityContext.fsGroup Set keycloak-config-cli pod's Security Context fsGroup\n##",
+          "title": "podSecurityContext",
+          "type": "object"
+        },
+        "podTolerations": {
+          "items": {},
+          "description": "##\n## @param keycloakConfigCli.podTolerations Tolerations for job pod assignment\n## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/\n##",
+          "title": "podTolerations",
+          "type": "array"
+        },
+        "resources": {
+          "additionalProperties": false,
+          "description": "## @param keycloakConfigCli.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)\n## Example:\n## resources:\n##   requests:\n##     cpu: 2\n##     memory: 512Mi\n##   limits:\n##     cpu: 3\n##     memory: 1024Mi\n##",
+          "title": "resources",
+          "type": "object"
+        },
+        "resourcesPreset": {
+          "default": "small",
+          "description": "## Keycloak config CLI resource requests and limits\n## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/\n## @param keycloakConfigCli.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if keycloakConfigCli.resources is set (keycloakConfigCli.resources is recommended for production).\n## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15\n##",
+          "title": "resourcesPreset",
+          "type": "string"
+        },
+        "sidecars": {
+          "items": {},
+          "description": "## @param keycloakConfigCli.sidecars Add additional sidecar containers to the Keycloak config cli pod\n## Example:\n## sidecars:\n##   - name: your-image-name\n##     image: your-image\n##     imagePullPolicy: Always\n##     ports:\n##       - name: portname\n##         containerPort: 1234\n##",
+          "title": "sidecars",
+          "type": "array"
+        }
+      },
+      "description": "## Configuration for keycloak-config-cli\n## ref: https://github.com/adorsys/keycloak-config-cli\n##",
+      "title": "keycloakConfigCli",
+      "type": "object"
+    },
+    "kubeVersion": {
+      "default": "",
+      "description": "## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)\n##",
+      "title": "kubeVersion",
+      "type": "string"
+    },
+    "lifecycleHooks": {
+      "additionalProperties": false,
+      "description": "## @param lifecycleHooks LifecycleHooks to set additional configuration at startup\n##",
+      "title": "lifecycleHooks",
+      "type": "object"
+    },
+    "livenessProbe": {
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "default": true,
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "failureThreshold": {
+          "default": 3,
+          "title": "failureThreshold",
+          "type": "integer"
+        },
+        "initialDelaySeconds": {
+          "default": 300,
+          "title": "initialDelaySeconds",
+          "type": "integer"
+        },
+        "periodSeconds": {
+          "default": 1,
+          "title": "periodSeconds",
+          "type": "integer"
+        },
+        "successThreshold": {
+          "default": 1,
+          "title": "successThreshold",
+          "type": "integer"
+        },
+        "timeoutSeconds": {
+          "default": 5,
+          "title": "timeoutSeconds",
+          "type": "integer"
+        }
+      },
+      "description": "## Configure extra options for Keycloak containers' liveness, readiness and startup probes\n## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes\n## @param livenessProbe.enabled Enable livenessProbe on Keycloak containers\n## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe\n## @param livenessProbe.periodSeconds Period seconds for livenessProbe\n## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe\n## @param livenessProbe.failureThreshold Failure threshold for livenessProbe\n## @param livenessProbe.successThreshold Success threshold for livenessProbe\n##",
+      "title": "livenessProbe",
+      "type": "object"
+    },
+    "logging": {
+      "additionalProperties": false,
+      "properties": {
+        "level": {
+          "default": "INFO",
+          "title": "level",
+          "type": "string"
+        },
+        "output": {
+          "default": "default",
+          "title": "output",
+          "type": "string"
+        }
+      },
+      "description": "## Keycloak logging configuration\n## ref: https://www.keycloak.org/server/logging\n## @param logging.output Alternates between the default log output format or json format\n## @param logging.level Allowed values as documented: FATAL, ERROR, WARN, INFO, DEBUG, TRACE, ALL, OFF\n##",
+      "title": "logging",
+      "type": "object"
+    },
+    "metrics": {
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "default": false,
+          "description": "## @param metrics.enabled Enable exposing Keycloak statistics\n## ref: https://github.com/bitnami/containers/tree/main/bitnami/keycloak#enabling-statistics\n##",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "prometheusRule": {
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {
+              "default": false,
+              "description": "## @param metrics.prometheusRule.enabled Create PrometheusRule Resource for scraping metrics using PrometheusOperator\n##",
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "groups": {
+              "items": {},
+              "description": "## @param metrics.prometheusRule.groups Groups, containing the alert rules.\n## Example:\n##   groups:\n##     - name: Keycloak\n##       rules:\n##         - alert: KeycloakInstanceNotAvailable\n##           annotations:\n##             message: \"Keycloak instance in namespace {{ `{{` }} $labels.namespace {{ `}}` }} has not been available for the last 5 minutes.\"\n##           expr: |\n##             absent(kube_pod_status_ready{namespace=\"{{ include \"common.names.namespace\" . }}\", condition=\"true\"} * on (pod) kube_pod_labels{pod=~\"{{ include \"common.names.fullname\" . }}-\\\\d+\", namespace=\"{{ include \"common.names.namespace\" . }}\"}) != 0\n##           for: 5m\n##           labels:\n##             severity: critical",
+              "title": "groups",
+              "type": "array"
+            },
+            "labels": {
+              "additionalProperties": false,
+              "description": "## @param metrics.prometheusRule.labels Additional labels that can be used so PrometheusRule will be discovered by Prometheus\n##",
+              "title": "labels",
+              "type": "object"
+            },
+            "namespace": {
+              "default": "",
+              "description": "## @param metrics.prometheusRule.namespace Namespace which Prometheus is running in\n##",
+              "title": "namespace",
+              "type": "string"
+            }
+          },
+          "description": "## Prometheus Operator alert rules configuration\n##",
+          "title": "prometheusRule",
+          "type": "object"
+        },
+        "service": {
+          "additionalProperties": false,
+          "properties": {
+            "annotations": {
+              "additionalProperties": false,
+              "properties": {
+                "prometheus.io/port": {
+                  "default": "{{ .Values.metrics.service.ports.http }}",
+                  "title": "prometheus.io/port",
+                  "type": "string"
+                },
+                "prometheus.io/scrape": {
+                  "default": "true",
+                  "title": "prometheus.io/scrape",
+                  "type": "string"
+                }
+              },
+              "description": "## @param metrics.service.annotations [object] Annotations for enabling prometheus to access the metrics endpoints\n##",
+              "title": "annotations",
+              "type": "object"
+            },
+            "extraPorts": {
+              "items": {},
+              "description": "## @param metrics.service.extraPorts [array] Add additional ports to the keycloak metrics service (i.e. admin port 9000)\n##",
+              "title": "extraPorts",
+              "type": "array"
+            },
+            "ports": {
+              "additionalProperties": false,
+              "properties": {
+                "http": {
+                  "default": 8080,
+                  "title": "http",
+                  "type": "integer"
+                }
+              },
+              "description": "## @param metrics.service.ports.http Metrics service HTTP port\n##",
+              "title": "ports",
+              "type": "object"
+            }
+          },
+          "description": "## Keycloak metrics service parameters\n##",
+          "title": "service",
+          "type": "object"
+        },
+        "serviceMonitor": {
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {
+              "default": false,
+              "description": "## @param metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator\n##",
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "endpoints": {
+              "items": {
+                "anyOf": [
+                  {
+                    "additionalProperties": false,
+                    "properties": {
+                      "path": {
+                        "default": "{{ include \"keycloak.httpPath\" . }}metrics",
+                        "title": "path",
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  {
+                    "additionalProperties": false,
+                    "properties": {
+                      "path": {
+                        "default": "{{ include \"keycloak.httpPath\" . }}realms/{{ .Values.adminRealm }}/metrics",
+                        "title": "path",
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  }
+                ]
+              },
+              "description": "## @param metrics.serviceMonitor.endpoints [array] The endpoint configuration of the ServiceMonitor. Path is mandatory. Interval, timeout and labellings can be overwritten.\n##",
+              "title": "endpoints",
+              "type": "array"
+            },
+            "honorLabels": {
+              "default": false,
+              "description": "## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels\n##",
+              "title": "honorLabels",
+              "type": "boolean"
+            },
+            "interval": {
+              "default": "30s",
+              "description": "## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped\n##",
+              "title": "interval",
+              "type": "string"
+            },
+            "jobLabel": {
+              "default": "",
+              "description": "## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.\n##",
+              "title": "jobLabel",
+              "type": "string"
+            },
+            "labels": {
+              "additionalProperties": false,
+              "description": "## @param metrics.serviceMonitor.labels Additional labels that can be used so ServiceMonitor will be discovered by Prometheus\n##",
+              "title": "labels",
+              "type": "object"
+            },
+            "metricRelabelings": {
+              "items": {},
+              "description": "## @param metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion\n##",
+              "title": "metricRelabelings",
+              "type": "array"
+            },
+            "namespace": {
+              "default": "",
+              "description": "## @param metrics.serviceMonitor.namespace Namespace which Prometheus is running in\n##",
+              "title": "namespace",
+              "type": "string"
+            },
+            "path": {
+              "default": "",
+              "description": "## @param metrics.serviceMonitor.path Metrics service HTTP path. Deprecated: Use @param metrics.serviceMonitor.endpoints instead\n##",
+              "title": "path",
+              "type": "string"
+            },
+            "port": {
+              "default": "http",
+              "description": "## @param metrics.serviceMonitor.port Metrics service HTTP port\n##",
+              "title": "port",
+              "type": "string"
+            },
+            "relabelings": {
+              "items": {},
+              "description": "## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping\n##",
+              "title": "relabelings",
+              "type": "array"
+            },
+            "scrapeTimeout": {
+              "default": "",
+              "description": "## @param metrics.serviceMonitor.scrapeTimeout Specify the timeout after which the scrape is ended\n## e.g:\n##   scrapeTimeout: 30s\n##",
+              "title": "scrapeTimeout",
+              "type": "string"
+            },
+            "selector": {
+              "additionalProperties": false,
+              "description": "## @param metrics.serviceMonitor.selector Prometheus instance selector labels\n## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration\n##",
+              "title": "selector",
+              "type": "object"
+            }
+          },
+          "description": "## Prometheus Operator ServiceMonitor configuration\n##",
+          "title": "serviceMonitor",
+          "type": "object"
+        }
+      },
+      "description": "## Metrics configuration\n##",
+      "title": "metrics",
+      "type": "object"
+    },
+    "minReadySeconds": {
+      "default": 0,
+      "description": "## @param minReadySeconds How many seconds a pod needs to be ready before killing the next, during update\n##",
+      "title": "minReadySeconds",
+      "type": "integer"
+    },
+    "nameOverride": {
+      "default": "",
+      "description": "## @param nameOverride String to partially override common.names.fullname\n##",
+      "title": "nameOverride",
+      "type": "string"
+    },
+    "namespaceOverride": {
+      "default": "",
+      "description": "## @param namespaceOverride String to fully override common.names.namespace\n##",
+      "title": "namespaceOverride",
+      "type": "string"
+    },
+    "networkPolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "allowExternal": {
+          "default": true,
+          "description": "## @param networkPolicy.allowExternal Don't require server label for connections\n## The Policy model to apply. When set to false, only pods with the correct\n## server label will have network access to the ports server is listening\n## on. When true, server will accept connections from any source\n## (with the correct destination port).\n##",
+          "title": "allowExternal",
+          "type": "boolean"
+        },
+        "allowExternalEgress": {
+          "default": true,
+          "description": "## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.\n##",
+          "title": "allowExternalEgress",
+          "type": "boolean"
+        },
+        "enabled": {
+          "default": true,
+          "description": "## @param networkPolicy.enabled Specifies whether a NetworkPolicy should be created\n##",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "extraEgress": {
+          "items": {},
+          "description": "## @param networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy\n## e.g:\n## extraEgress:\n##   - ports:\n##       - port: 1234\n##     to:\n##       - podSelector:\n##           - matchLabels:\n##               - role: frontend\n##       - podSelector:\n##           - matchExpressions:\n##               - key: role\n##                 operator: In\n##                 values:\n##                   - frontend\n##",
+          "title": "extraEgress",
+          "type": "array"
+        },
+        "extraIngress": {
+          "items": {},
+          "description": "## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy\n## e.g:\n## extraIngress:\n##   - ports:\n##       - port: 1234\n##     from:\n##       - podSelector:\n##           - matchLabels:\n##               - role: frontend\n##       - podSelector:\n##           - matchExpressions:\n##               - key: role\n##                 operator: In\n##                 values:\n##                   - frontend",
+          "title": "extraIngress",
+          "type": "array"
+        },
+        "ingressNSMatchLabels": {
+          "additionalProperties": false,
+          "description": "## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces\n## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces\n##",
+          "title": "ingressNSMatchLabels",
+          "type": "object"
+        },
+        "ingressNSPodMatchLabels": {
+          "additionalProperties": false,
+          "title": "ingressNSPodMatchLabels",
+          "type": "object"
+        },
+        "kubeAPIServerPorts": {
+          "items": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "integer"
+              }
+            ]
+          },
+          "description": "## @param networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)\n##",
+          "title": "kubeAPIServerPorts",
+          "type": "array"
+        }
+      },
+      "description": "## Network Policy configuration\n## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/\n##",
+      "title": "networkPolicy",
+      "type": "object"
+    },
+    "nodeAffinityPreset": {
+      "additionalProperties": false,
+      "properties": {
+        "key": {
+          "default": "",
+          "description": "## @param nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set.\n## E.g.\n## key: \"kubernetes.io/e2e-az-name\"\n##",
+          "title": "key",
+          "type": "string"
+        },
+        "type": {
+          "default": "",
+          "description": "## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`\n##",
+          "title": "type",
+          "type": "string"
+        },
+        "values": {
+          "items": {},
+          "description": "## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set.\n## E.g.\n## values:\n##   - e2e-az1\n##   - e2e-az2\n##",
+          "title": "values",
+          "type": "array"
+        }
+      },
+      "description": "## Node affinity preset\n## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity\n##",
+      "title": "nodeAffinityPreset",
+      "type": "object"
+    },
+    "nodeSelector": {
+      "additionalProperties": false,
+      "description": "## @param nodeSelector Node labels for pod assignment\n## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/\n##",
+      "title": "nodeSelector",
+      "type": "object"
+    },
+    "pdb": {
+      "additionalProperties": false,
+      "properties": {
+        "create": {
+          "default": true,
+          "description": "## @param pdb.create Enable/disable a Pod Disruption Budget creation\n##",
+          "title": "create",
+          "type": "boolean"
+        },
+        "maxUnavailable": {
+          "default": "",
+          "description": "## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable\n##",
+          "title": "maxUnavailable",
+          "type": "string"
+        },
+        "minAvailable": {
+          "default": "",
+          "description": "## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled\n##",
+          "title": "minAvailable",
+          "type": "string"
+        }
+      },
+      "description": "## Keycloak Pod Disruption Budget configuration\n## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/\n##",
+      "title": "pdb",
+      "type": "object"
+    },
+    "podAffinityPreset": {
+      "default": "",
+      "description": "## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`\n## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity\n##",
+      "title": "podAffinityPreset",
+      "type": "string"
+    },
+    "podAnnotations": {
+      "additionalProperties": false,
+      "description": "## @param podAnnotations Annotations for Keycloak pods\n## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/\n##",
+      "title": "podAnnotations",
+      "type": "object"
+    },
+    "podAntiAffinityPreset": {
+      "default": "soft",
+      "description": "## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`\n## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity\n##",
+      "title": "podAntiAffinityPreset",
+      "type": "string"
+    },
+    "podLabels": {
+      "additionalProperties": false,
+      "description": "## @param podLabels Extra labels for Keycloak pods\n## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/\n##",
+      "title": "podLabels",
+      "type": "object"
+    },
+    "podManagementPolicy": {
+      "default": "Parallel",
+      "description": "## @param podManagementPolicy Pod management policy for the Keycloak statefulset\n##",
+      "title": "podManagementPolicy",
+      "type": "string"
+    },
+    "podSecurityContext": {
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "default": true,
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "fsGroup": {
+          "default": 1001,
+          "title": "fsGroup",
+          "type": "integer"
+        },
+        "fsGroupChangePolicy": {
+          "default": "Always",
+          "title": "fsGroupChangePolicy",
+          "type": "string"
+        },
+        "supplementalGroups": {
+          "items": {},
+          "title": "supplementalGroups",
+          "type": "array"
+        },
+        "sysctls": {
+          "items": {},
+          "title": "sysctls",
+          "type": "array"
+        }
+      },
+      "description": "##\n## Keycloak pods' SecurityContext\n## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod\n## @param podSecurityContext.enabled Enabled Keycloak pods' Security Context\n## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy\n## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface\n## @param podSecurityContext.supplementalGroups Set filesystem extra groups\n## @param podSecurityContext.fsGroup Set Keycloak pod's Security Context fsGroup\n##",
+      "title": "podSecurityContext",
+      "type": "object"
+    },
+    "postgresql": {
+      "additionalProperties": false,
+      "properties": {
+        "architecture": {
+          "default": "standalone",
+          "title": "architecture",
+          "type": "string"
+        },
+        "auth": {
+          "additionalProperties": false,
+          "properties": {
+            "database": {
+              "default": "bitnami_keycloak",
+              "title": "database",
+              "type": "string"
+            },
+            "existingSecret": {
+              "default": "",
+              "title": "existingSecret",
+              "type": "string"
+            },
+            "password": {
+              "default": "",
+              "title": "password",
+              "type": "string"
+            },
+            "postgresPassword": {
+              "default": "",
+              "title": "postgresPassword",
+              "type": "string"
+            },
+            "secretKeys": {
+              "additionalProperties": false,
+              "properties": {
+                "userPasswordKey": {
+                  "default": "password",
+                  "title": "userPasswordKey",
+                  "type": "string"
+                }
+              },
+              "title": "secretKeys",
+              "type": "object"
+            },
+            "username": {
+              "default": "bn_keycloak",
+              "title": "username",
+              "type": "string"
+            }
+          },
+          "title": "auth",
+          "type": "object"
+        },
+        "enabled": {
+          "default": true,
+          "title": "enabled",
+          "type": "boolean"
+        }
+      },
+      "description": "## PostgreSQL chart configuration\n## ref: https://github.com/bitnami/charts/blob/main/bitnami/postgresql/values.yaml\n## @param postgresql.enabled Switch to enable or disable the PostgreSQL helm chart\n## @param postgresql.auth.postgresPassword Password for the \"postgres\" admin user. Ignored if `auth.existingSecret` with key `postgres-password` is provided\n## @param postgresql.auth.username Name for a custom user to create\n## @param postgresql.auth.password Password for the custom user to create\n## @param postgresql.auth.database Name for a custom database to create\n## @param postgresql.auth.existingSecret Name of existing secret to use for PostgreSQL credentials\n## @param postgresql.auth.secretKeys.userPasswordKey Name of key in existing secret to use for PostgreSQL credentials. Only used when `auth.existingSecret` is set.\n## @param postgresql.architecture PostgreSQL architecture (`standalone` or `replication`)\n##",
+      "title": "postgresql",
+      "type": "object"
+    },
+    "priorityClassName": {
+      "default": "",
+      "description": "## @param priorityClassName Keycloak pods' Priority Class Name\n## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/\n##",
+      "title": "priorityClassName",
+      "type": "string"
+    },
+    "production": {
+      "default": false,
+      "description": "## @param production Run Keycloak in production mode. TLS configuration is required except when using proxy=edge.\n##",
+      "title": "production",
+      "type": "boolean"
+    },
+    "proxy": {
+      "default": "",
+      "description": "## @param proxy reverse Proxy mode edge, reencrypt, passthrough or none\n## DEPRECATED: use proxyHeaders instead\n## ref: https://www.keycloak.org/server/reverseproxy\n##",
+      "title": "proxy",
+      "type": "string"
+    },
+    "proxyHeaders": {
+      "default": "",
+      "description": "## @param proxyHeaders Set Keycloak proxy headers\n##",
+      "title": "proxyHeaders",
+      "type": "string"
+    },
+    "rbac": {
+      "additionalProperties": false,
+      "properties": {
+        "create": {
+          "default": false,
+          "description": "## @param rbac.create Whether to create and use RBAC resources or not\n##",
+          "title": "create",
+          "type": "boolean"
+        },
+        "rules": {
+          "items": {},
+          "description": "## @param rbac.rules Custom RBAC rules\n## Example:\n## rules:\n##   - apiGroups:\n##       - \"\"\n##     resources:\n##       - pods\n##     verbs:\n##       - get\n##       - list\n##",
+          "title": "rules",
+          "type": "array"
+        }
+      },
+      "description": "## Specifies whether RBAC resources should be created\n##",
+      "title": "rbac",
+      "type": "object"
+    },
+    "readinessProbe": {
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "default": true,
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "failureThreshold": {
+          "default": 3,
+          "title": "failureThreshold",
+          "type": "integer"
+        },
+        "initialDelaySeconds": {
+          "default": 30,
+          "title": "initialDelaySeconds",
+          "type": "integer"
+        },
+        "periodSeconds": {
+          "default": 10,
+          "title": "periodSeconds",
+          "type": "integer"
+        },
+        "successThreshold": {
+          "default": 1,
+          "title": "successThreshold",
+          "type": "integer"
+        },
+        "timeoutSeconds": {
+          "default": 1,
+          "title": "timeoutSeconds",
+          "type": "integer"
+        }
+      },
+      "description": "## @param readinessProbe.enabled Enable readinessProbe on Keycloak containers\n## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe\n## @param readinessProbe.periodSeconds Period seconds for readinessProbe\n## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe\n## @param readinessProbe.failureThreshold Failure threshold for readinessProbe\n## @param readinessProbe.successThreshold Success threshold for readinessProbe\n##",
+      "title": "readinessProbe",
+      "type": "object"
+    },
+    "replicaCount": {
+      "default": 1,
+      "description": "## @param replicaCount Number of Keycloak replicas to deploy\n##",
+      "title": "replicaCount",
+      "type": "integer"
+    },
+    "resources": {
+      "additionalProperties": false,
+      "description": "## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)\n## Example:\n## resources:\n##   requests:\n##     cpu: 2\n##     memory: 512Mi\n##   limits:\n##     cpu: 3\n##     memory: 1024Mi\n##",
+      "title": "resources",
+      "type": "object"
+    },
+    "resourcesPreset": {
+      "default": "small",
+      "description": "## Keycloak resource requests and limits\n## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/\n## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).\n## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15\n##",
+      "title": "resourcesPreset",
+      "type": "string"
+    },
+    "revisionHistoryLimitCount": {
+      "default": 10,
+      "description": "## @param revisionHistoryLimitCount Number of controller revisions to keep\n##",
+      "title": "revisionHistoryLimitCount",
+      "type": "integer"
+    },
+    "schedulerName": {
+      "default": "",
+      "description": "## @param schedulerName Use an alternate scheduler, e.g. \"stork\".\n## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/\n##",
+      "title": "schedulerName",
+      "type": "string"
+    },
+    "service": {
+      "additionalProperties": false,
+      "properties": {
+        "annotations": {
+          "additionalProperties": false,
+          "description": "## @param service.annotations Additional custom annotations for Keycloak service\n##",
+          "title": "annotations",
+          "type": "object"
+        },
+        "clusterIP": {
+          "default": "",
+          "description": "## @param service.clusterIP Keycloak service clusterIP IP\n## e.g:\n## clusterIP: None\n##",
+          "title": "clusterIP",
+          "type": "string"
+        },
+        "externalTrafficPolicy": {
+          "default": "Cluster",
+          "description": "## @param service.externalTrafficPolicy Enable client source IP preservation\n## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip\n##",
+          "title": "externalTrafficPolicy",
+          "type": "string"
+        },
+        "extraHeadlessPorts": {
+          "items": {},
+          "description": "DEPRECATED service.extraHeadlessPorts will be removed in a future release, please use service.headless.extraPorts instead\n## @param service.extraHeadlessPorts Extra ports to expose on Keycloak headless service\n##",
+          "title": "extraHeadlessPorts",
+          "type": "array"
+        },
+        "extraPorts": {
+          "items": {},
+          "description": "## @param service.extraPorts Extra port to expose on Keycloak service\n##",
+          "title": "extraPorts",
+          "type": "array"
+        },
+        "headless": {
+          "additionalProperties": false,
+          "properties": {
+            "annotations": {
+              "additionalProperties": false,
+              "description": "## @param service.headless.annotations Annotations for the headless service.\n##",
+              "title": "annotations",
+              "type": "object"
+            },
+            "extraPorts": {
+              "items": {},
+              "description": "## @param service.headless.extraPorts Extra ports to expose on Keycloak headless service\n##",
+              "title": "extraPorts",
+              "type": "array"
+            }
+          },
+          "description": "## Headless service properties\n##",
+          "title": "headless",
+          "type": "object"
+        },
+        "http": {
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {
+              "default": true,
+              "title": "enabled",
+              "type": "boolean"
+            }
+          },
+          "description": "## @param service.http.enabled Enable http port on service\n##",
+          "title": "http",
+          "type": "object"
+        },
+        "loadBalancerIP": {
+          "default": "",
+          "description": "## @param service.loadBalancerIP loadBalancerIP for the SuiteCRM Service (optional, cloud specific)\n## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer\n##",
+          "title": "loadBalancerIP",
+          "type": "string"
+        },
+        "loadBalancerSourceRanges": {
+          "items": {},
+          "description": "## @param service.loadBalancerSourceRanges Address that are allowed when service is LoadBalancer\n## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service\n## Example:\n## loadBalancerSourceRanges:\n##   - 10.10.10.0/24\n##",
+          "title": "loadBalancerSourceRanges",
+          "type": "array"
+        },
+        "nodePorts": {
+          "additionalProperties": false,
+          "properties": {
+            "http": {
+              "default": "",
+              "title": "http",
+              "type": "string"
+            },
+            "https": {
+              "default": "",
+              "title": "https",
+              "type": "string"
+            }
+          },
+          "description": "## @param service.nodePorts [object] Specify the nodePort values for the LoadBalancer and NodePort service types.\n## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport\n##",
+          "title": "nodePorts",
+          "type": "object"
+        },
+        "ports": {
+          "additionalProperties": false,
+          "properties": {
+            "http": {
+              "default": 80,
+              "title": "http",
+              "type": "integer"
+            },
+            "https": {
+              "default": 443,
+              "title": "https",
+              "type": "integer"
+            }
+          },
+          "description": "## @param service.ports.http Keycloak service HTTP port\n## @param service.ports.https Keycloak service HTTPS port\n##",
+          "title": "ports",
+          "type": "object"
+        },
+        "sessionAffinity": {
+          "default": "None",
+          "description": "## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin\n## Values: ClientIP or None\n## ref: https://kubernetes.io/docs/concepts/services-networking/service/\n##",
+          "title": "sessionAffinity",
+          "type": "string"
+        },
+        "sessionAffinityConfig": {
+          "additionalProperties": false,
+          "description": "## @param service.sessionAffinityConfig Additional settings for the sessionAffinity\n## sessionAffinityConfig:\n##   clientIP:\n##     timeoutSeconds: 300\n##",
+          "title": "sessionAffinityConfig",
+          "type": "object"
+        },
+        "type": {
+          "default": "ClusterIP",
+          "description": "## @param service.type Kubernetes service type\n##",
+          "title": "type",
+          "type": "string"
+        }
+      },
+      "description": "## Service configuration\n##",
+      "title": "service",
+      "type": "object"
+    },
+    "serviceAccount": {
+      "additionalProperties": false,
+      "properties": {
+        "annotations": {
+          "additionalProperties": false,
+          "description": "## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount\n##",
+          "title": "annotations",
+          "type": "object"
+        },
+        "automountServiceAccountToken": {
+          "default": false,
+          "description": "## @param serviceAccount.automountServiceAccountToken Auto-mount the service account token in the pod\n##",
+          "title": "automountServiceAccountToken",
+          "type": "boolean"
+        },
+        "create": {
+          "default": true,
+          "description": "## @param serviceAccount.create Enable the creation of a ServiceAccount for Keycloak pods\n##",
+          "title": "create",
+          "type": "boolean"
+        },
+        "extraLabels": {
+          "additionalProperties": false,
+          "description": "## @param serviceAccount.extraLabels Additional labels for the ServiceAccount\n##",
+          "title": "extraLabels",
+          "type": "object"
+        },
+        "name": {
+          "default": "",
+          "description": "## @param serviceAccount.name Name of the created ServiceAccount\n## If not set and create is true, a name is generated using the fullname template\n##",
+          "title": "name",
+          "type": "string"
+        }
+      },
+      "description": "## @section RBAC parameter\n## Specifies whether a ServiceAccount should be created\n##",
+      "title": "serviceAccount",
+      "type": "object"
+    },
+    "sidecars": {
+      "items": {},
+      "description": "## @param sidecars Add additional sidecar containers to the Keycloak pods\n## Example:\n## sidecars:\n##   - name: your-image-name\n##     image: your-image\n##     imagePullPolicy: Always\n##     ports:\n##       - name: portname\n##         containerPort: 1234\n##",
+      "title": "sidecars",
+      "type": "array"
+    },
+    "spi": {
+      "additionalProperties": false,
+      "properties": {
+        "existingSecret": {
+          "default": "",
+          "description": "## @param spi.existingSecret Existing secret containing the Keycloak truststore for SPI connection over HTTPS/TLS\n## Create this secret following the steps below:\n## 1) Rename your truststore to `keycloak-spi.truststore.jks` or use a different name overwriting the value 'spi.truststoreFilename'.\n## 2) Run the command below where SECRET_NAME is the name of the secret you want to create:\n##       kubectl create secret generic SECRET_NAME --from-file=./keycloak-spi.truststore.jks --from-file=./keycloak.keystore.jks\n##",
+          "title": "existingSecret",
+          "type": "string"
+        },
+        "hostnameVerificationPolicy": {
+          "default": "",
+          "description": "## @param spi.hostnameVerificationPolicy Verify the hostname of the server's certificate. Allowed values: \"ANY\", \"WILDCARD\", \"STRICT\".\n##",
+          "title": "hostnameVerificationPolicy",
+          "type": "string"
+        },
+        "passwordsSecret": {
+          "default": "",
+          "description": "## @param spi.passwordsSecret Secret containing the SPI Truststore passwords.\n##",
+          "title": "passwordsSecret",
+          "type": "string"
+        },
+        "truststoreFilename": {
+          "default": "keycloak-spi.truststore.jks",
+          "description": "## @param spi.truststoreFilename Truststore filename inside the existing secret\n##",
+          "title": "truststoreFilename",
+          "type": "string"
+        },
+        "truststorePassword": {
+          "default": "",
+          "description": "## @param spi.truststorePassword Password to access the truststore when it's password-protected\n##",
+          "title": "truststorePassword",
+          "type": "string"
+        }
+      },
+      "description": "## SPI TLS settings\n## ref: https://www.keycloak.org/server/keycloak-truststore\n##",
+      "title": "spi",
+      "type": "object"
+    },
+    "startupProbe": {
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "default": false,
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "failureThreshold": {
+          "default": 60,
+          "title": "failureThreshold",
+          "type": "integer"
+        },
+        "initialDelaySeconds": {
+          "default": 30,
+          "title": "initialDelaySeconds",
+          "type": "integer"
+        },
+        "periodSeconds": {
+          "default": 5,
+          "title": "periodSeconds",
+          "type": "integer"
+        },
+        "successThreshold": {
+          "default": 1,
+          "title": "successThreshold",
+          "type": "integer"
+        },
+        "timeoutSeconds": {
+          "default": 1,
+          "title": "timeoutSeconds",
+          "type": "integer"
+        }
+      },
+      "description": "## When enabling this, make sure to set initialDelaySeconds to 0 for livenessProbe and readinessProbe\n## @param startupProbe.enabled Enable startupProbe on Keycloak containers\n## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe\n## @param startupProbe.periodSeconds Period seconds for startupProbe\n## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe\n## @param startupProbe.failureThreshold Failure threshold for startupProbe\n## @param startupProbe.successThreshold Success threshold for startupProbe\n##",
+      "title": "startupProbe",
+      "type": "object"
+    },
+    "statefulsetAnnotations": {
+      "additionalProperties": false,
+      "description": "## @param statefulsetAnnotations Optionally add extra annotations on the statefulset resource",
+      "title": "statefulsetAnnotations",
+      "type": "object"
+    },
+    "terminationGracePeriodSeconds": {
+      "default": "",
+      "description": "## @param terminationGracePeriodSeconds Seconds Keycloak pod needs to terminate gracefully\n## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods\n##",
+      "title": "terminationGracePeriodSeconds",
+      "type": "string"
+    },
+    "tls": {
+      "additionalProperties": false,
+      "properties": {
+        "autoGenerated": {
+          "default": false,
+          "description": "## @param tls.autoGenerated Generate automatically self-signed TLS certificates. Currently only supports PEM certificates\n##",
+          "title": "autoGenerated",
+          "type": "boolean"
+        },
+        "enabled": {
+          "default": false,
+          "description": "## @param tls.enabled Enable TLS encryption. Required for HTTPs traffic.\n##",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "existingSecret": {
+          "default": "",
+          "description": "## @param tls.existingSecret Existing secret containing the TLS certificates per Keycloak replica\n## Create this secret following the steps below:\n## 1) Generate your truststore and keystore files (more info at https://www.keycloak.org/docs/latest/server_installation/#_setting_up_ssl)\n## 2) Rename your truststore to `keycloak.truststore.jks` or use a different name overwriting the value 'tls.truststoreFilename'.\n## 3) Rename your keystores to `keycloak.keystore.jks` or use a different name overwriting the value 'tls.keystoreFilename'.\n## 4) Run the command below where SECRET_NAME is the name of the secret you want to create:\n##       kubectl create secret generic SECRET_NAME --from-file=./keycloak.truststore.jks --from-file=./keycloak.keystore.jks\n## NOTE: If usePem enabled, make sure the PEM key and cert are named 'tls.key' and 'tls.crt' respectively.\n##",
+          "title": "existingSecret",
+          "type": "string"
+        },
+        "keystoreFilename": {
+          "default": "keycloak.keystore.jks",
+          "description": "## @param tls.keystoreFilename Keystore filename inside the existing secret\n##",
+          "title": "keystoreFilename",
+          "type": "string"
+        },
+        "keystorePassword": {
+          "default": "",
+          "description": "## @param tls.keystorePassword Password to access the keystore when it's password-protected\n##",
+          "title": "keystorePassword",
+          "type": "string"
+        },
+        "passwordsSecret": {
+          "default": "",
+          "description": "## @param tls.passwordsSecret Secret containing the Keystore and Truststore passwords.\n##",
+          "title": "passwordsSecret",
+          "type": "string"
+        },
+        "truststoreFilename": {
+          "default": "keycloak.truststore.jks",
+          "description": "## @param tls.truststoreFilename Truststore filename inside the existing secret\n##",
+          "title": "truststoreFilename",
+          "type": "string"
+        },
+        "truststorePassword": {
+          "default": "",
+          "description": "## @param tls.truststorePassword Password to access the truststore when it's password-protected\n##",
+          "title": "truststorePassword",
+          "type": "string"
+        },
+        "usePem": {
+          "default": false,
+          "description": "## @param tls.usePem Use PEM certificates as input instead of PKS12/JKS stores\n## If \"true\", the Keycloak chart will look for the files keycloak.key and keycloak.crt inside the secret provided with 'existingSecret'.\n##",
+          "title": "usePem",
+          "type": "boolean"
+        }
+      },
+      "description": "## HTTPS settings\n## ref: https://github.com/bitnami/containers/tree/main/bitnami/keycloak#tls-encryption\n##",
+      "title": "tls",
+      "type": "object"
+    },
+    "tolerations": {
+      "items": {},
+      "description": "## @param tolerations Tolerations for pod assignment\n## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/\n##",
+      "title": "tolerations",
+      "type": "array"
+    },
+    "topologySpreadConstraints": {
+      "items": {},
+      "description": "## @param topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template\n## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods\n##",
+      "title": "topologySpreadConstraints",
+      "type": "array"
+    },
+    "updateStrategy": {
+      "additionalProperties": false,
+      "properties": {
+        "rollingUpdate": {
+          "additionalProperties": false,
+          "title": "rollingUpdate",
+          "type": "object"
+        },
+        "type": {
+          "default": "RollingUpdate",
+          "title": "type",
+          "type": "string"
+        }
+      },
+      "description": "## @param updateStrategy.type Keycloak statefulset strategy type\n## @param updateStrategy.rollingUpdate Keycloak statefulset rolling update configuration parameters\n## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies\n##",
+      "title": "updateStrategy",
+      "type": "object"
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object"
+}
