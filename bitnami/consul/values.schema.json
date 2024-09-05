@@ -1,0 +1,1409 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "affinity": {
+      "additionalProperties": false,
+      "description": "## @param affinity Affinity for pod assignment\n## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity\n## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set\n##",
+      "title": "affinity",
+      "type": "object"
+    },
+    "args": {
+      "items": {},
+      "description": "## @param args Args for running the container (set to default if not set). Use array form\n##",
+      "title": "args",
+      "type": "array"
+    },
+    "automountServiceAccountToken": {
+      "default": false,
+      "description": "## @param automountServiceAccountToken Mount Service Account token in pod\n##",
+      "title": "automountServiceAccountToken",
+      "type": "boolean"
+    },
+    "clusterDomain": {
+      "default": "cluster.local",
+      "description": "## @param clusterDomain Kubernetes cluster domain name\n##",
+      "title": "clusterDomain",
+      "type": "string"
+    },
+    "command": {
+      "items": {},
+      "description": "## @param command Command for running the container (set to default if not set). Use array form\n##",
+      "title": "command",
+      "type": "array"
+    },
+    "commonAnnotations": {
+      "additionalProperties": false,
+      "description": "## @param commonAnnotations Annotations to add to all deployed objects (sub-charts are not considered)\n##",
+      "title": "commonAnnotations",
+      "type": "object"
+    },
+    "commonLabels": {
+      "additionalProperties": false,
+      "description": "## @param commonLabels Labels to add to all deployed objects (sub-charts are not considered)\n##",
+      "title": "commonLabels",
+      "type": "object"
+    },
+    "configuration": {
+      "default": "",
+      "description": "## @param configuration HashiCorp Consul configuration to be injected as ConfigMap\n## Example:\n## configuration: |-\n##   {\n##   \"datacenter\":\"dc2\",\n##   \"domain\":\"consul\",\n##   \"data_dir\":\"/opt/bitnami/consul/data\",\n##   \"pid_file\":\"/opt/bitnami/consul/tmp/consul.pid\",\n##   \"server\":true,\n##   \"ui\":false,\n##   \"bootstrap_expect\":3,\n##   \"addresses\": {\n##       \"http\":\"0.0.0.0\"\n##   },\n##   \"ports\": {\n##       \"http\":8500,\n##       \"dns\":8600,\n##       \"serf_lan\":8301,\n##       \"server\":8300\n##   },\n##   \"serf_lan\":\"0.0.0.0\"\n##   }\n##",
+      "title": "configuration",
+      "type": "string"
+    },
+    "containerPorts": {
+      "additionalProperties": false,
+      "properties": {
+        "dns": {
+          "default": 8600,
+          "title": "dns",
+          "type": "integer"
+        },
+        "http": {
+          "default": 8500,
+          "title": "http",
+          "type": "integer"
+        },
+        "rpc": {
+          "default": 8400,
+          "title": "rpc",
+          "type": "integer"
+        },
+        "rpcServer": {
+          "default": 8300,
+          "title": "rpcServer",
+          "type": "integer"
+        },
+        "serfLAN": {
+          "default": 8301,
+          "title": "serfLAN",
+          "type": "integer"
+        },
+        "serfWAN": {
+          "default": 8302,
+          "title": "serfWAN",
+          "type": "integer"
+        }
+      },
+      "description": "## HashiCorp Consul container ports to open\n## @param containerPorts.http Port to open for HTTP in Consul\n## @param containerPorts.dns Port to open for DNS server in Consul\n## @param containerPorts.rpc Port to open for RPC in Consul\n## @param containerPorts.rpcServer Port to open for RPC Server in Consul\n## @param containerPorts.serfLAN Port to open for Serf LAN in Consul\n## @param containerPorts.serfWAN Port to open for Serf WAN in Consul\n##",
+      "title": "containerPorts",
+      "type": "object"
+    },
+    "containerSecurityContext": {
+      "additionalProperties": false,
+      "properties": {
+        "allowPrivilegeEscalation": {
+          "default": false,
+          "title": "allowPrivilegeEscalation",
+          "type": "boolean"
+        },
+        "capabilities": {
+          "additionalProperties": false,
+          "properties": {
+            "drop": {
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "title": "drop",
+              "type": "array"
+            }
+          },
+          "title": "capabilities",
+          "type": "object"
+        },
+        "enabled": {
+          "default": true,
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "privileged": {
+          "default": false,
+          "title": "privileged",
+          "type": "boolean"
+        },
+        "readOnlyRootFilesystem": {
+          "default": true,
+          "title": "readOnlyRootFilesystem",
+          "type": "boolean"
+        },
+        "runAsGroup": {
+          "default": 1001,
+          "title": "runAsGroup",
+          "type": "integer"
+        },
+        "runAsNonRoot": {
+          "default": true,
+          "title": "runAsNonRoot",
+          "type": "boolean"
+        },
+        "runAsUser": {
+          "default": 1001,
+          "title": "runAsUser",
+          "type": "integer"
+        },
+        "seLinuxOptions": {
+          "additionalProperties": false,
+          "title": "seLinuxOptions",
+          "type": "object"
+        },
+        "seccompProfile": {
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "default": "RuntimeDefault",
+              "title": "type",
+              "type": "string"
+            }
+          },
+          "title": "seccompProfile",
+          "type": "object"
+        }
+      },
+      "description": "## Container security context\n## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container\n## @param containerSecurityContext.enabled Enabled Consul containers' Security Context\n## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container\n## @param containerSecurityContext.runAsUser Set Consul containers' Security Context runAsUser\n## @param containerSecurityContext.runAsGroup Set Consul containers' Security Context runAsGroup\n## @param containerSecurityContext.allowPrivilegeEscalation Set Consul containers' Security Context allowPrivilegeEscalation\n## @param containerSecurityContext.capabilities.drop Set containers' repo server Security Context capabilities to be dropped\n## @param containerSecurityContext.readOnlyRootFilesystem Set containers' repo server Security Context readOnlyRootFilesystem\n## @param containerSecurityContext.runAsNonRoot Set Consul containers' Security Context runAsNonRoot\n## @param containerSecurityContext.privileged Set container's Security Context privileged\n## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile\n##",
+      "title": "containerSecurityContext",
+      "type": "object"
+    },
+    "customLivenessProbe": {
+      "additionalProperties": false,
+      "description": "## @param customLivenessProbe Override default liveness probe\n##",
+      "title": "customLivenessProbe",
+      "type": "object"
+    },
+    "customReadinessProbe": {
+      "additionalProperties": false,
+      "description": "## @param customReadinessProbe Override default readiness probe\n##",
+      "title": "customReadinessProbe",
+      "type": "object"
+    },
+    "customStartupProbe": {
+      "additionalProperties": false,
+      "description": "## @param customStartupProbe Override default startup probe\n##",
+      "title": "customStartupProbe",
+      "type": "object"
+    },
+    "datacenterName": {
+      "default": "dc1",
+      "description": "## @param datacenterName Datacenter name for Consul. If not supplied, will use the Consul\n##",
+      "title": "datacenterName",
+      "type": "string"
+    },
+    "diagnosticMode": {
+      "additionalProperties": false,
+      "properties": {
+        "args": {
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "description": "## @param diagnosticMode.args Args to override all containers in the deployment\n##",
+          "title": "args",
+          "type": "array"
+        },
+        "command": {
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "description": "## @param diagnosticMode.command Command to override all containers in the deployment\n##",
+          "title": "command",
+          "type": "array"
+        },
+        "enabled": {
+          "default": false,
+          "description": "## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)\n##",
+          "title": "enabled",
+          "type": "boolean"
+        }
+      },
+      "description": "## Enable diagnostic mode in the deployment\n##",
+      "title": "diagnosticMode",
+      "type": "object"
+    },
+    "domain": {
+      "default": "consul",
+      "description": "## @param domain Consul domain name\n##",
+      "title": "domain",
+      "type": "string"
+    },
+    "existingConfigmap": {
+      "default": "",
+      "description": "## @param existingConfigmap ConfigMap with HashiCorp Consul configuration\n##",
+      "title": "existingConfigmap",
+      "type": "string"
+    },
+    "extraDeploy": {
+      "items": {},
+      "description": "## @param extraDeploy Array of extra objects to deploy with the release\n##",
+      "title": "extraDeploy",
+      "type": "array"
+    },
+    "extraEnvVars": {
+      "items": {},
+      "description": "## @param extraEnvVars Extra environment variables to be set on HashiCorp Consul container\n## For example:\n##",
+      "title": "extraEnvVars",
+      "type": "array"
+    },
+    "extraEnvVarsCM": {
+      "default": "",
+      "description": " - name: FOO\n   value: BAR\n## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars\n##",
+      "title": "extraEnvVarsCM",
+      "type": "string"
+    },
+    "extraEnvVarsSecret": {
+      "default": "",
+      "description": "## @param extraEnvVarsSecret Name of existing Secret containing extra env vars\n##",
+      "title": "extraEnvVarsSecret",
+      "type": "string"
+    },
+    "extraVolumeMounts": {
+      "items": {},
+      "description": "## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for Hashicorp Consul container\n##",
+      "title": "extraVolumeMounts",
+      "type": "array"
+    },
+    "extraVolumes": {
+      "items": {},
+      "description": "## @param extraVolumes Optionally specify extra list of additional volumes for Hashicorp Consul container\n##",
+      "title": "extraVolumes",
+      "type": "array"
+    },
+    "fullnameOverride": {
+      "default": "",
+      "description": "## @param fullnameOverride String to fully override common.names.fullname\n##",
+      "title": "fullnameOverride",
+      "type": "string"
+    },
+    "global": {
+      "additionalProperties": false,
+      "properties": {
+        "compatibility": {
+          "additionalProperties": false,
+          "properties": {
+            "openshift": {
+              "additionalProperties": false,
+              "properties": {
+                "adaptSecurityContext": {
+                  "default": "auto",
+                  "description": "## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)\n##",
+                  "title": "adaptSecurityContext",
+                  "type": "string"
+                }
+              },
+              "description": "## Compatibility adaptations for Openshift\n##",
+              "title": "openshift",
+              "type": "object"
+            }
+          },
+          "description": "## Compatibility adaptations for Kubernetes platforms\n##",
+          "title": "compatibility",
+          "type": "object"
+        },
+        "defaultStorageClass": {
+          "default": "",
+          "title": "defaultStorageClass",
+          "type": "string"
+        },
+        "imagePullSecrets": {
+          "items": {},
+          "description": "## E.g.\n## imagePullSecrets:\n##   - myRegistryKeySecretName\n##",
+          "title": "imagePullSecrets",
+          "type": "array"
+        },
+        "imageRegistry": {
+          "default": "",
+          "title": "imageRegistry",
+          "type": "string"
+        },
+        "storageClass": {
+          "default": "",
+          "title": "storageClass",
+          "type": "string"
+        }
+      },
+      "description": "## @param global.imageRegistry Global Docker image registry\n## @param global.imagePullSecrets Global Docker registry secret names as an array\n## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)\n## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead\n##",
+      "title": "global",
+      "type": "object"
+    },
+    "gossipKey": {
+      "default": "",
+      "description": "## @param gossipKey Gossip key for all members. The key must be base64-encoded, can be generated with $(consul keygen)\n## Example:\n## gossipKey: \"DVoLa/k99hfBEdIfCLkzSpWg4obElLYVIFDsutKCL/w=\"\n##",
+      "title": "gossipKey",
+      "type": "string"
+    },
+    "hostAliases": {
+      "items": {},
+      "description": "## @param hostAliases Deployment pod host aliases\n## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/\n##",
+      "title": "hostAliases",
+      "type": "array"
+    },
+    "image": {
+      "additionalProperties": false,
+      "properties": {
+        "debug": {
+          "default": false,
+          "description": "## Enable debug mode\n##",
+          "title": "debug",
+          "type": "boolean"
+        },
+        "digest": {
+          "default": "",
+          "title": "digest",
+          "type": "string"
+        },
+        "pullPolicy": {
+          "default": "IfNotPresent",
+          "description": "## Specify a imagePullPolicy\n## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'\n## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images\n##",
+          "title": "pullPolicy",
+          "type": "string"
+        },
+        "pullSecrets": {
+          "items": {},
+          "description": "## Optionally specify an array of imagePullSecrets.\n## Secrets must be manually created in the namespace.\n## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/\n## e.g:\n## pullSecrets:\n##   - myRegistryKeySecretName\n##",
+          "title": "pullSecrets",
+          "type": "array"
+        },
+        "registry": {
+          "default": "docker.io",
+          "title": "registry",
+          "type": "string"
+        },
+        "repository": {
+          "default": "bitnami/consul",
+          "title": "repository",
+          "type": "string"
+        },
+        "tag": {
+          "default": "1.19.2-debian-12-r0",
+          "title": "tag",
+          "type": "string"
+        }
+      },
+      "description": "## Bitnami HashiCorp Consul image\n## ref: https://hub.docker.com/r/bitnami/consul/tags/\n## @param image.registry [default: REGISTRY_NAME] HashiCorp Consul image registry\n## @param image.repository [default: REPOSITORY_NAME/consul] HashiCorp Consul image repository\n## @skip image.tag HashiCorp Consul image tag (immutable tags are recommended)\n## @param image.digest HashiCorp Consul image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag\n## @param image.pullPolicy HashiCorp Consul image pull policy\n## @param image.pullSecrets HashiCorp Consul image pull secrets\n## @param image.debug Enable image debug mode\n##",
+      "title": "image",
+      "type": "object"
+    },
+    "ingress": {
+      "additionalProperties": false,
+      "properties": {
+        "annotations": {
+          "additionalProperties": false,
+          "description": "## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.\n## For a full list of possible ingress annotations, please see\n## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md\n## Use this parameter to set the required annotations for cert-manager, see\n## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations\n##\n## e.g:\n## annotations:\n##   kubernetes.io/ingress.class: nginx\n##   cert-manager.io/cluster-issuer: cluster-issuer-name\n##",
+          "title": "annotations",
+          "type": "object"
+        },
+        "apiVersion": {
+          "default": "",
+          "description": "## @param ingress.apiVersion Override API Version (automatically detected if not set)\n##",
+          "title": "apiVersion",
+          "type": "string"
+        },
+        "enabled": {
+          "default": false,
+          "description": "## @param ingress.enabled Enable ingress resource for Management console\n##",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "existingSecret": {
+          "default": "",
+          "description": "## @param ingress.existingSecret It is you own the certificate as secret.",
+          "title": "existingSecret",
+          "type": "string"
+        },
+        "extraHosts": {
+          "items": {},
+          "description": "## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record\n## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array\n## extraHosts:\n## - name: consul-ui.local\n##   path: /\n##",
+          "title": "extraHosts",
+          "type": "array"
+        },
+        "extraPaths": {
+          "items": {},
+          "description": "## @param ingress.extraPaths Any additional arbitrary paths that may need to be added to the ingress under the main host.\n## For example: The ALB ingress controller requires a special rule for handling SSL redirection.\n## extraPaths:\n## - path: /*\n##   backend:\n##     serviceName: ssl-redirect\n##     servicePort: use-annotation\n##",
+          "title": "extraPaths",
+          "type": "array"
+        },
+        "extraRules": {
+          "items": {},
+          "description": "## @param ingress.extraRules Additional rules to be covered with this ingress record\n## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules\n## e.g:\n## extraRules:\n## - host: example.local\n##     http:\n##       path: /\n##       backend:\n##         service:\n##           name: example-svc\n##           port:\n##             name: http\n##",
+          "title": "extraRules",
+          "type": "array"
+        },
+        "extraTls": {
+          "items": {},
+          "description": "## @param ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record\n## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls\n## extraTls:\n## - hosts:\n##     - consul-ui.local\n##   secretName: rconsul-ui.local-tls\n##",
+          "title": "extraTls",
+          "type": "array"
+        },
+        "hostname": {
+          "default": "consul-ui.local",
+          "description": "## @param ingress.hostname Default host for the ingress resource, a host pointing to this will be created\n##",
+          "title": "hostname",
+          "type": "string"
+        },
+        "ingressClassName": {
+          "default": "",
+          "description": "## @param ingress.ingressClassName Set the ingerssClassName on the ingress record for k8s 1.18+\n## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .\n## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/\n##",
+          "title": "ingressClassName",
+          "type": "string"
+        },
+        "path": {
+          "default": "/",
+          "description": "## @param ingress.path Path for the default host\n##",
+          "title": "path",
+          "type": "string"
+        },
+        "pathType": {
+          "default": "ImplementationSpecific",
+          "description": "## @param ingress.pathType Ingress path type\n##",
+          "title": "pathType",
+          "type": "string"
+        },
+        "secrets": {
+          "items": {},
+          "description": "## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets\n## key and certificate should start with -----BEGIN CERTIFICATE----- or\n## -----BEGIN RSA PRIVATE KEY-----\n##\n## name should line up with a tlsSecret set further up\n## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set\n##\n## It is also possible to create and manage the certificates outside of this helm chart\n## Please see README.md for more information\n## Example:\n## - name: consul-ui.local-tls\n##   key:\n##   certificate:\n##",
+          "title": "secrets",
+          "type": "array"
+        },
+        "selfSigned": {
+          "default": false,
+          "description": "## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm\n##",
+          "title": "selfSigned",
+          "type": "boolean"
+        },
+        "tls": {
+          "default": false,
+          "description": "## @param ingress.tls Enable TLS configuration for the hostname defined at ingress.hostname parameter\n## TLS certificates will be retrieved from a TLS secret with name: {{- printf \"%s-tls\" .Values.ingress.hostname | trunc 63 | trimSuffix \"-\" }}\n## or a custom one if you use the tls.existingSecret parameter\n## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it\n## Example:\n## existingSecret: name-of-existing-secret\n##",
+          "title": "tls",
+          "type": "boolean"
+        }
+      },
+      "description": "## Configure the ingress resource that allows you to access the Consul UI\n## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/\n##",
+      "title": "ingress",
+      "type": "object"
+    },
+    "initContainers": {
+      "items": {},
+      "description": "## @param initContainers Add additional init containers to the Hashicorp Consul pods\n##",
+      "title": "initContainers",
+      "type": "array"
+    },
+    "kubeVersion": {
+      "default": "",
+      "description": "## @param kubeVersion Override Kubernetes version\n##",
+      "title": "kubeVersion",
+      "type": "string"
+    },
+    "lifecycleHooks": {
+      "additionalProperties": false,
+      "description": "## @param lifecycleHooks Add lifecycle hooks to the deployment\n##",
+      "title": "lifecycleHooks",
+      "type": "object"
+    },
+    "livenessProbe": {
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "default": true,
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "failureThreshold": {
+          "default": 6,
+          "title": "failureThreshold",
+          "type": "integer"
+        },
+        "initialDelaySeconds": {
+          "default": 30,
+          "title": "initialDelaySeconds",
+          "type": "integer"
+        },
+        "periodSeconds": {
+          "default": 10,
+          "title": "periodSeconds",
+          "type": "integer"
+        },
+        "successThreshold": {
+          "default": 1,
+          "title": "successThreshold",
+          "type": "integer"
+        },
+        "timeoutSeconds": {
+          "default": 5,
+          "title": "timeoutSeconds",
+          "type": "integer"
+        }
+      },
+      "description": "## Configure extra options for HashiCorp Consul containers' liveness and readiness probes\n## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes\n## @param livenessProbe.enabled Enable livenessProbe\n## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe\n## @param livenessProbe.periodSeconds Period seconds for livenessProbe\n## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe\n## @param livenessProbe.failureThreshold Failure threshold for livenessProbe\n## @param livenessProbe.successThreshold Success threshold for livenessProbe\n##",
+      "title": "livenessProbe",
+      "type": "object"
+    },
+    "localConfig": {
+      "default": "",
+      "description": "## @param localConfig Extra configuration that will be added to the default one\n## Example:\n## localConfig: |-\n##   {\n##     \"key\": \"value\"\n##   }\n##",
+      "title": "localConfig",
+      "type": "string"
+    },
+    "metrics": {
+      "additionalProperties": false,
+      "properties": {
+        "containerSecurityContext": {
+          "additionalProperties": false,
+          "properties": {
+            "allowPrivilegeEscalation": {
+              "default": false,
+              "title": "allowPrivilegeEscalation",
+              "type": "boolean"
+            },
+            "capabilities": {
+              "additionalProperties": false,
+              "properties": {
+                "drop": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "title": "drop",
+                  "type": "array"
+                }
+              },
+              "title": "capabilities",
+              "type": "object"
+            },
+            "enabled": {
+              "default": true,
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "privileged": {
+              "default": false,
+              "title": "privileged",
+              "type": "boolean"
+            },
+            "readOnlyRootFilesystem": {
+              "default": true,
+              "title": "readOnlyRootFilesystem",
+              "type": "boolean"
+            },
+            "runAsGroup": {
+              "default": 1001,
+              "title": "runAsGroup",
+              "type": "integer"
+            },
+            "runAsNonRoot": {
+              "default": true,
+              "title": "runAsNonRoot",
+              "type": "boolean"
+            },
+            "runAsUser": {
+              "default": 1001,
+              "title": "runAsUser",
+              "type": "integer"
+            },
+            "seLinuxOptions": {
+              "additionalProperties": false,
+              "title": "seLinuxOptions",
+              "type": "object"
+            },
+            "seccompProfile": {
+              "additionalProperties": false,
+              "properties": {
+                "type": {
+                  "default": "RuntimeDefault",
+                  "title": "type",
+                  "type": "string"
+                }
+              },
+              "title": "seccompProfile",
+              "type": "object"
+            }
+          },
+          "description": "## Container security context\n## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container\n## @param metrics.containerSecurityContext.enabled Enabled Consul containers' Security Context\n## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container\n## @param metrics.containerSecurityContext.runAsUser Set Consul containers' Security Context runAsUser\n## @param metrics.containerSecurityContext.runAsGroup Set Consul containers' Security Context runAsGroup\n## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set Consul containers' Security Context allowPrivilegeEscalation\n## @param metrics.containerSecurityContext.capabilities.drop Set containers' repo server Security Context capabilities to be dropped\n## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set containers' repo server Security Context readOnlyRootFilesystem\n## @param metrics.containerSecurityContext.runAsNonRoot Set Consul containers' Security Context runAsNonRoot\n## @param metrics.containerSecurityContext.privileged Set container's Security Context privileged\n## @param metrics.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile\n##",
+          "title": "containerSecurityContext",
+          "type": "object"
+        },
+        "enabled": {
+          "default": false,
+          "description": "## @param metrics.enabled Start a side-car prometheus exporter\n##",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "image": {
+          "additionalProperties": false,
+          "properties": {
+            "digest": {
+              "default": "",
+              "title": "digest",
+              "type": "string"
+            },
+            "pullPolicy": {
+              "default": "IfNotPresent",
+              "title": "pullPolicy",
+              "type": "string"
+            },
+            "pullSecrets": {
+              "items": {},
+              "description": "## Optionally specify an array of imagePullSecrets.\n## Secrets must be manually created in the namespace.\n## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/\n## e.g:\n## pullSecrets:\n##   - myRegistryKeySecretName\n##",
+              "title": "pullSecrets",
+              "type": "array"
+            },
+            "registry": {
+              "default": "docker.io",
+              "title": "registry",
+              "type": "string"
+            },
+            "repository": {
+              "default": "bitnami/consul-exporter",
+              "title": "repository",
+              "type": "string"
+            },
+            "tag": {
+              "default": "0.12.1-debian-12-r2",
+              "title": "tag",
+              "type": "string"
+            }
+          },
+          "description": "## Bitnami HashiCorp Consul Prometheus Exporter image\n## ref: https://hub.docker.com/r/bitnami/consul-exporter/tags/\n## @param metrics.image.registry [default: REGISTRY_NAME] HashiCorp Consul Prometheus Exporter image registry\n## @param metrics.image.repository [default: REPOSITORY_NAME/consul-exporter] HashiCorp Consul Prometheus Exporter image repository\n## @skip metrics.image.tag HashiCorp Consul Prometheus Exporter image tag (immutable tags are recommended)\n## @param metrics.image.digest HashiCorp Consul Prometheus Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag\n## @param metrics.image.pullPolicy HashiCorp Consul Prometheus Exporter image pull policy\n## @param metrics.image.pullSecrets HashiCorp Consul Prometheus Exporter image pull secrets\n##",
+          "title": "image",
+          "type": "object"
+        },
+        "podAnnotations": {
+          "additionalProperties": false,
+          "properties": {
+            "prometheus.io/port": {
+              "default": "9107",
+              "title": "prometheus.io/port",
+              "type": "string"
+            },
+            "prometheus.io/scrape": {
+              "default": "true",
+              "title": "prometheus.io/scrape",
+              "type": "string"
+            }
+          },
+          "description": "## @param metrics.podAnnotations [object] Metrics exporter pod Annotation and Labels\n## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/\n##",
+          "title": "podAnnotations",
+          "type": "object"
+        },
+        "resources": {
+          "additionalProperties": false,
+          "description": "## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)\n## Example:\n## resources:\n##   requests:\n##     cpu: 2\n##     memory: 512Mi\n##   limits:\n##     cpu: 3\n##     memory: 1024Mi\n##",
+          "title": "resources",
+          "type": "object"
+        },
+        "resourcesPreset": {
+          "default": "nano",
+          "description": "## HashiCorp Consul Prometheus exporter resource requests and limits\n## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/\n## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).\n## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15\n##",
+          "title": "resourcesPreset",
+          "type": "string"
+        },
+        "service": {
+          "additionalProperties": false,
+          "properties": {
+            "annotations": {
+              "additionalProperties": false,
+              "properties": {
+                "prometheus.io/port": {
+                  "default": "9107",
+                  "title": "prometheus.io/port",
+                  "type": "string"
+                },
+                "prometheus.io/scrape": {
+                  "default": "true",
+                  "title": "prometheus.io/scrape",
+                  "type": "string"
+                }
+              },
+              "description": "## @param metrics.service.annotations [object] Provide any additional annotations which may be required.\n## This can be used to set the LoadBalancer service type to internal only.\n## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer\n##",
+              "title": "annotations",
+              "type": "object"
+            },
+            "loadBalancerIP": {
+              "default": "",
+              "description": "## @param metrics.service.loadBalancerIP Service Load Balancer IP\n## Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank\n##",
+              "title": "loadBalancerIP",
+              "type": "string"
+            },
+            "type": {
+              "default": "ClusterIP",
+              "description": "## @param metrics.service.type Kubernetes Service type\n##",
+              "title": "type",
+              "type": "string"
+            }
+          },
+          "description": "## Consul Prometheus exporter service type\n##",
+          "title": "service",
+          "type": "object"
+        },
+        "serviceMonitor": {
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {
+              "default": false,
+              "description": "## @param metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator, set to true to create a Service Monitor Entry\n##",
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "honorLabels": {
+              "default": false,
+              "description": "## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint\n##",
+              "title": "honorLabels",
+              "type": "boolean"
+            },
+            "interval": {
+              "default": "30s",
+              "description": "## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped\n##",
+              "title": "interval",
+              "type": "string"
+            },
+            "jobLabel": {
+              "default": "",
+              "description": "## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.\n##",
+              "title": "jobLabel",
+              "type": "string"
+            },
+            "labels": {
+              "additionalProperties": false,
+              "description": "## DEPRECATED: metrics.serviceMonitor.additionalLabels will be removed in a future release, plese use metrics.serviceMonitor.labels instead\n## @param metrics.serviceMonitor.labels Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with\n## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec\n##",
+              "title": "labels",
+              "type": "object"
+            },
+            "metricRelabelings": {
+              "items": {},
+              "description": "## @param metrics.serviceMonitor.metricRelabelings Metrics relabelings to add to the scrape endpoint\n##",
+              "title": "metricRelabelings",
+              "type": "array"
+            },
+            "namespace": {
+              "default": "",
+              "description": "## @param metrics.serviceMonitor.namespace The namespace in which the ServiceMonitor will be created\n##",
+              "title": "namespace",
+              "type": "string"
+            },
+            "relabelings": {
+              "items": {},
+              "description": "## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping\n## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig\n##",
+              "title": "relabelings",
+              "type": "array"
+            },
+            "scrapeTimeout": {
+              "default": "",
+              "description": "## @param metrics.serviceMonitor.scrapeTimeout The timeout after which the scrape is ended\n##",
+              "title": "scrapeTimeout",
+              "type": "string"
+            },
+            "selector": {
+              "additionalProperties": false,
+              "description": "## @param metrics.serviceMonitor.selector ServiceMonitor selector labels\n## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration\n##\n## selector:\n##   prometheus: my-prometheus\n##",
+              "title": "selector",
+              "type": "object"
+            }
+          },
+          "description": "## Prometheus Service Monitor\n## ref: https://github.com/coreos/prometheus-operator\n##",
+          "title": "serviceMonitor",
+          "type": "object"
+        }
+      },
+      "description": "## Prometheus Exporter / Metrics\n##",
+      "title": "metrics",
+      "type": "object"
+    },
+    "nameOverride": {
+      "default": "",
+      "description": "## @param nameOverride String to partially override common.names.fullname\n##",
+      "title": "nameOverride",
+      "type": "string"
+    },
+    "networkPolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "allowExternal": {
+          "default": true,
+          "description": "## @param networkPolicy.allowExternal Don't require server label for connections\n## The Policy model to apply. When set to false, only pods with the correct\n## server label will have network access to the ports server is listening\n## on. When true, server will accept connections from any source\n## (with the correct destination port).\n##",
+          "title": "allowExternal",
+          "type": "boolean"
+        },
+        "allowExternalEgress": {
+          "default": true,
+          "description": "## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.\n##",
+          "title": "allowExternalEgress",
+          "type": "boolean"
+        },
+        "enabled": {
+          "default": true,
+          "description": "## @param networkPolicy.enabled Specifies whether a NetworkPolicy should be created\n##",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "extraEgress": {
+          "items": {},
+          "description": "## @param networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)\n## e.g:\n## extraEgress:\n##   - ports:\n##       - port: 1234\n##     to:\n##       - podSelector:\n##           - matchLabels:\n##               - role: frontend\n##       - podSelector:\n##           - matchExpressions:\n##               - key: role\n##                 operator: In\n##                 values:\n##                   - frontend\n##",
+          "title": "extraEgress",
+          "type": "array"
+        },
+        "extraIngress": {
+          "items": {},
+          "description": "## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy\n## e.g:\n## extraIngress:\n##   - ports:\n##       - port: 1234\n##     from:\n##       - podSelector:\n##           - matchLabels:\n##               - role: frontend\n##       - podSelector:\n##           - matchExpressions:\n##               - key: role\n##                 operator: In\n##                 values:\n##                   - frontend",
+          "title": "extraIngress",
+          "type": "array"
+        },
+        "ingressNSMatchLabels": {
+          "additionalProperties": false,
+          "description": "## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces\n## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces\n##",
+          "title": "ingressNSMatchLabels",
+          "type": "object"
+        },
+        "ingressNSPodMatchLabels": {
+          "additionalProperties": false,
+          "title": "ingressNSPodMatchLabels",
+          "type": "object"
+        }
+      },
+      "description": "## Network Policies\n## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/\n##",
+      "title": "networkPolicy",
+      "type": "object"
+    },
+    "nodeAffinityPreset": {
+      "additionalProperties": false,
+      "properties": {
+        "key": {
+          "default": "",
+          "description": "## @param nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set.\n## E.g.\n## key: \"kubernetes.io/e2e-az-name\"\n##",
+          "title": "key",
+          "type": "string"
+        },
+        "type": {
+          "default": "",
+          "description": "## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`\n##",
+          "title": "type",
+          "type": "string"
+        },
+        "values": {
+          "items": {},
+          "description": "## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set.\n## E.g.\n## values:\n##   - e2e-az1\n##   - e2e-az2\n##",
+          "title": "values",
+          "type": "array"
+        }
+      },
+      "description": "## Node affinity preset\n## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity\n##",
+      "title": "nodeAffinityPreset",
+      "type": "object"
+    },
+    "nodeSelector": {
+      "additionalProperties": false,
+      "description": "## @param nodeSelector Node labels for pod assignment\n## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/\n##",
+      "title": "nodeSelector",
+      "type": "object"
+    },
+    "pdb": {
+      "additionalProperties": false,
+      "properties": {
+        "create": {
+          "default": true,
+          "description": "## @param pdb.create Enable/disable a Pod Disruption Budget creation\n##",
+          "title": "create",
+          "type": "boolean"
+        },
+        "maxUnavailable": {
+          "default": "",
+          "description": "## @param pdb.maxUnavailable Max number of pods that can be unavailable after the eviction\n##",
+          "title": "maxUnavailable",
+          "type": "string"
+        },
+        "minAvailable": {
+          "default": "",
+          "description": "## @param pdb.minAvailable Minimum number of pods that must still be available after the eviction\n##",
+          "title": "minAvailable",
+          "type": "string"
+        }
+      },
+      "description": "## HashiCorp Consul Pod Disruption Budget configuration\n## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/\n##",
+      "title": "pdb",
+      "type": "object"
+    },
+    "persistence": {
+      "additionalProperties": false,
+      "properties": {
+        "accessModes": {
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "description": "## @param persistence.accessModes Persistent Volume Access Mode\n##",
+          "title": "accessModes",
+          "type": "array"
+        },
+        "annotations": {
+          "additionalProperties": false,
+          "description": "## @param persistence.annotations Persistent Volume Claim annotations\n##",
+          "title": "annotations",
+          "type": "object"
+        },
+        "enabled": {
+          "default": true,
+          "description": "## @param persistence.enabled Enable HashiCorp Consul data persistence using PVC, use a Persistent Volume Claim, If false, use emptyDir\n##",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "size": {
+          "default": "8Gi",
+          "description": "## @param persistence.size PVC Storage Request for HashiCorp Consul data volume\n##",
+          "title": "size",
+          "type": "string"
+        },
+        "storageClass": {
+          "default": "",
+          "description": "## @param persistence.storageClass Persistent Volume storage class\n## If defined, storageClassName: <storageClass>\n## If set to \"-\", storageClassName: \"\", which disables dynamic provisioning\n## If undefined (the default) or set to null, no storageClassName spec is\n##   set, choosing the default provisioner.  (gp2 on AWS, standard on\n##   GKE, AWS & OpenStack)\n##",
+          "title": "storageClass",
+          "type": "string"
+        }
+      },
+      "description": "## Enable persistence using Persistent Volume Claims\n## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/\n##",
+      "title": "persistence",
+      "type": "object"
+    },
+    "podAffinityPreset": {
+      "default": "",
+      "description": "## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`\n## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity\n##",
+      "title": "podAffinityPreset",
+      "type": "string"
+    },
+    "podAnnotations": {
+      "additionalProperties": false,
+      "description": "## @param podAnnotations Additional pod annotations\n## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/\n##",
+      "title": "podAnnotations",
+      "type": "object"
+    },
+    "podAntiAffinityPreset": {
+      "default": "soft",
+      "description": "## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`\n## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity\n##",
+      "title": "podAntiAffinityPreset",
+      "type": "string"
+    },
+    "podLabels": {
+      "additionalProperties": false,
+      "description": "## @param podLabels Pod labels\n## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/\n##",
+      "title": "podLabels",
+      "type": "object"
+    },
+    "podManagementPolicy": {
+      "default": "Parallel",
+      "description": "## @param podManagementPolicy StatefulSet pod management policy\n##",
+      "title": "podManagementPolicy",
+      "type": "string"
+    },
+    "podSecurityContext": {
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "default": true,
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "fsGroup": {
+          "default": 1001,
+          "title": "fsGroup",
+          "type": "integer"
+        },
+        "fsGroupChangePolicy": {
+          "default": "Always",
+          "title": "fsGroupChangePolicy",
+          "type": "string"
+        },
+        "supplementalGroups": {
+          "items": {},
+          "title": "supplementalGroups",
+          "type": "array"
+        },
+        "sysctls": {
+          "items": {},
+          "title": "sysctls",
+          "type": "array"
+        }
+      },
+      "description": "## Pod security context\n## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod\n## @param podSecurityContext.enabled Enable security context for HashiCorp Consul pods\n## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy\n## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface\n## @param podSecurityContext.supplementalGroups Set filesystem extra groups\n## @param podSecurityContext.fsGroup Group ID for the volumes of the pod\n##",
+      "title": "podSecurityContext",
+      "type": "object"
+    },
+    "priorityClassName": {
+      "default": "",
+      "description": "## @param priorityClassName Priority class assigned to the Pods\n##",
+      "title": "priorityClassName",
+      "type": "string"
+    },
+    "raftMultiplier": {
+      "default": "1",
+      "description": "## @param raftMultiplier Multiplier used to scale key Raft timing parameters\n##",
+      "title": "raftMultiplier",
+      "type": "string"
+    },
+    "readinessProbe": {
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "default": true,
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "failureThreshold": {
+          "default": 6,
+          "title": "failureThreshold",
+          "type": "integer"
+        },
+        "initialDelaySeconds": {
+          "default": 5,
+          "title": "initialDelaySeconds",
+          "type": "integer"
+        },
+        "periodSeconds": {
+          "default": 10,
+          "title": "periodSeconds",
+          "type": "integer"
+        },
+        "successThreshold": {
+          "default": 1,
+          "title": "successThreshold",
+          "type": "integer"
+        },
+        "timeoutSeconds": {
+          "default": 5,
+          "title": "timeoutSeconds",
+          "type": "integer"
+        }
+      },
+      "description": "## @param readinessProbe.enabled Enable readinessProbe\n## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe\n## @param readinessProbe.periodSeconds Period seconds for readinessProbe\n## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe\n## @param readinessProbe.failureThreshold Failure threshold for readinessProbe\n## @param readinessProbe.successThreshold Success threshold for readinessProbe\n##",
+      "title": "readinessProbe",
+      "type": "object"
+    },
+    "replicaCount": {
+      "default": 3,
+      "description": "## @param replicaCount Number of HashiCorp Consul replicas to deploy\n##",
+      "title": "replicaCount",
+      "type": "integer"
+    },
+    "resources": {
+      "additionalProperties": false,
+      "description": "## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)\n## Example:\n## resources:\n##   requests:\n##     cpu: 2\n##     memory: 512Mi\n##   limits:\n##     cpu: 3\n##     memory: 1024Mi\n##",
+      "title": "resources",
+      "type": "object"
+    },
+    "resourcesPreset": {
+      "default": "nano",
+      "description": "## Container's resource requests and limits\n## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/\n## We usually recommend not to specify default resources and to leave this as a conscious\n## choice for the user. This also increases chances charts run on environments with little\n## resources, such as Minikube. If you do want to specify resources, uncomment the following\n## lines, adjust them as necessary, and remove the curly braces after 'resources:'.\n## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).\n## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15\n##",
+      "title": "resourcesPreset",
+      "type": "string"
+    },
+    "runtimeClassName": {
+      "default": "",
+      "description": "## @param runtimeClassName Name of the runtime class to be used by pod(s)\n## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/\n##",
+      "title": "runtimeClassName",
+      "type": "string"
+    },
+    "schedulerName": {
+      "default": "",
+      "description": "## @param schedulerName Alternative scheduler\n## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/\n##",
+      "title": "schedulerName",
+      "type": "string"
+    },
+    "service": {
+      "additionalProperties": false,
+      "properties": {
+        "annotations": {
+          "additionalProperties": false,
+          "description": "## Provide any additional annotations which may be required. This can be used to\n## set the LoadBalancer service type to internal only.\n## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer\n## @param service.annotations Annotations for HashiCorp Consul UI service\n##",
+          "title": "annotations",
+          "type": "object"
+        },
+        "clusterIP": {
+          "default": "",
+          "description": "## @param service.clusterIP Consul service Cluster IP\n## e.g.:\n## clusterIP: None\n##",
+          "title": "clusterIP",
+          "type": "string"
+        },
+        "enabled": {
+          "default": true,
+          "description": "## @param service.enabled Use a service to access HashiCorp Consul Ui\n##",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "externalTrafficPolicy": {
+          "default": "Cluster",
+          "description": "## @param service.externalTrafficPolicy Service external traffic policy\n## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip\n##",
+          "title": "externalTrafficPolicy",
+          "type": "string"
+        },
+        "extraPorts": {
+          "items": {},
+          "description": "## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)\n##",
+          "title": "extraPorts",
+          "type": "array"
+        },
+        "headless": {
+          "additionalProperties": false,
+          "properties": {
+            "annotations": {
+              "additionalProperties": false,
+              "description": "## @param service.headless.annotations Annotations for the headless service.\n##",
+              "title": "annotations",
+              "type": "object"
+            }
+          },
+          "description": "## Headless service properties\n##",
+          "title": "headless",
+          "type": "object"
+        },
+        "loadBalancerIP": {
+          "default": "",
+          "description": "## @param service.loadBalancerIP HashiCorp Consul UI service Load Balancer IP\n## Set the LoadBalancer service type to internal only.\n## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer\n##",
+          "title": "loadBalancerIP",
+          "type": "string"
+        },
+        "loadBalancerSourceRanges": {
+          "items": {},
+          "description": "## @param service.loadBalancerSourceRanges Consul service Load Balancer sources\n## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service\n## e.g:\n## loadBalancerSourceRanges:\n##   - 10.10.10.0/24\n##",
+          "title": "loadBalancerSourceRanges",
+          "type": "array"
+        },
+        "nodePorts": {
+          "additionalProperties": false,
+          "properties": {
+            "http": {
+              "default": "",
+              "title": "http",
+              "type": "string"
+            }
+          },
+          "description": "## Specify the nodePort value for the LoadBalancer and NodePort service types.\n## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport\n## @param service.nodePorts.http Node port for HashiCorp Consul UI\n##",
+          "title": "nodePorts",
+          "type": "object"
+        },
+        "ports": {
+          "additionalProperties": false,
+          "properties": {
+            "http": {
+              "default": 80,
+              "title": "http",
+              "type": "integer"
+            }
+          },
+          "description": "## @param service.ports.http HashiCorp Consul UI svc port\n##",
+          "title": "ports",
+          "type": "object"
+        },
+        "sessionAffinity": {
+          "default": "None",
+          "description": "## @param service.sessionAffinity Session Affinity for Kubernetes service, can be \"None\" or \"ClientIP\"\n## If \"ClientIP\", consecutive client requests will be directed to the same Pod\n## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies\n##",
+          "title": "sessionAffinity",
+          "type": "string"
+        },
+        "sessionAffinityConfig": {
+          "additionalProperties": false,
+          "description": "## @param service.sessionAffinityConfig Additional settings for the sessionAffinity\n## sessionAffinityConfig:\n##   clientIP:\n##     timeoutSeconds: 300\n##",
+          "title": "sessionAffinityConfig",
+          "type": "object"
+        },
+        "type": {
+          "default": "ClusterIP",
+          "description": "## @param service.type HashiCorp Consul UI Service Type\n##",
+          "title": "type",
+          "type": "string"
+        }
+      },
+      "description": "## HashiCorp Consul UI service parameters\n##",
+      "title": "service",
+      "type": "object"
+    },
+    "serviceAccount": {
+      "additionalProperties": false,
+      "properties": {
+        "annotations": {
+          "additionalProperties": false,
+          "description": "## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount\n##",
+          "title": "annotations",
+          "type": "object"
+        },
+        "automountServiceAccountToken": {
+          "default": false,
+          "description": "## @param serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created\n## Can be set to false if pods using this serviceAccount do not need to use K8s API\n##",
+          "title": "automountServiceAccountToken",
+          "type": "boolean"
+        },
+        "create": {
+          "default": true,
+          "description": "## @param serviceAccount.create Enable creation of ServiceAccount for HashiCorp Consul pod\n##",
+          "title": "create",
+          "type": "boolean"
+        },
+        "name": {
+          "default": "",
+          "description": "## @param serviceAccount.name The name of the ServiceAccount to use.\n## If not set and create is true, a name is generated using the common.names.fullname template\n##",
+          "title": "name",
+          "type": "string"
+        }
+      },
+      "description": "## Service Account\n## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/\n##",
+      "title": "serviceAccount",
+      "type": "object"
+    },
+    "sidecars": {
+      "items": {},
+      "description": "## @param sidecars Add additional sidecar containers to the Hashicorp Consul pods\n##",
+      "title": "sidecars",
+      "type": "array"
+    },
+    "startupProbe": {
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "default": false,
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "failureThreshold": {
+          "default": 60,
+          "title": "failureThreshold",
+          "type": "integer"
+        },
+        "initialDelaySeconds": {
+          "default": 0,
+          "title": "initialDelaySeconds",
+          "type": "integer"
+        },
+        "periodSeconds": {
+          "default": 10,
+          "title": "periodSeconds",
+          "type": "integer"
+        },
+        "successThreshold": {
+          "default": 1,
+          "title": "successThreshold",
+          "type": "integer"
+        },
+        "timeoutSeconds": {
+          "default": 5,
+          "title": "timeoutSeconds",
+          "type": "integer"
+        }
+      },
+      "description": "## Configure extra options for startup probe\n## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes\n## @param startupProbe.enabled Enable startupProbe\n## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe\n## @param startupProbe.periodSeconds Period seconds for startupProbe\n## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe\n## @param startupProbe.failureThreshold Failure threshold for startupProbe\n## @param startupProbe.successThreshold Success threshold for startupProbe\n##",
+      "title": "startupProbe",
+      "type": "object"
+    },
+    "terminationGracePeriodSeconds": {
+      "default": "",
+      "description": "## @param terminationGracePeriodSeconds In seconds, time the given to the Consul pod needs to terminate gracefully\n## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods\n##",
+      "title": "terminationGracePeriodSeconds",
+      "type": "string"
+    },
+    "tlsEncryptionSecretName": {
+      "default": "",
+      "description": "## @param tlsEncryptionSecretName Name of existing secret with TLS encryption data\n## Use TLS to verify the authenticity of servers and clients.\n## Check README for more information.\n## Example:\n## tlsEncryptionSecretName: your-already-created-secret\n##",
+      "title": "tlsEncryptionSecretName",
+      "type": "string"
+    },
+    "tolerations": {
+      "items": {},
+      "description": "## @param tolerations Tolerations for pod assignment\n## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/\n##",
+      "title": "tolerations",
+      "type": "array"
+    },
+    "topologySpreadConstraints": {
+      "items": {},
+      "description": "## @param topologySpreadConstraints Topology Spread Constraints for pod assignment\n## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/\n## The value is evaluated as a template\n##",
+      "title": "topologySpreadConstraints",
+      "type": "array"
+    },
+    "updateStrategy": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "default": "RollingUpdate",
+          "title": "type",
+          "type": "string"
+        }
+      },
+      "description": "## @param updateStrategy.type Update strategy type for the HashiCorp Consul statefulset\n## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies\n##",
+      "title": "updateStrategy",
+      "type": "object"
+    },
+    "volumePermissions": {
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "default": false,
+          "description": "## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume\n##",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "image": {
+          "additionalProperties": false,
+          "properties": {
+            "digest": {
+              "default": "",
+              "title": "digest",
+              "type": "string"
+            },
+            "pullPolicy": {
+              "default": "IfNotPresent",
+              "title": "pullPolicy",
+              "type": "string"
+            },
+            "pullSecrets": {
+              "items": {},
+              "description": "## Optionally specify an array of imagePullSecrets.\n## Secrets must be manually created in the namespace.\n## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/\n## e.g:\n## pullSecrets:\n##   - myRegistryKeySecretName\n##",
+              "title": "pullSecrets",
+              "type": "array"
+            },
+            "registry": {
+              "default": "docker.io",
+              "title": "registry",
+              "type": "string"
+            },
+            "repository": {
+              "default": "bitnami/os-shell",
+              "title": "repository",
+              "type": "string"
+            },
+            "tag": {
+              "default": "12-debian-12-r28",
+              "title": "tag",
+              "type": "string"
+            }
+          },
+          "description": "## OS Shell + Utility image\n## ref: https://hub.docker.com/r/bitnami/os-shell/tags/\n## @param volumePermissions.image.registry [default: REGISTRY_NAME] OS Shell + Utility image registry\n## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] OS Shell + Utility image repository\n## @skip volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)\n## @param volumePermissions.image.digest OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag\n## @param volumePermissions.image.pullPolicy OS Shell + Utility image pull policy\n## @param volumePermissions.image.pullSecrets OS Shell + Utility image pull secrets\n##",
+          "title": "image",
+          "type": "object"
+        },
+        "resources": {
+          "additionalProperties": false,
+          "description": "## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)\n## Example:\n## resources:\n##   requests:\n##     cpu: 2\n##     memory: 512Mi\n##   limits:\n##     cpu: 3\n##     memory: 1024Mi\n##",
+          "title": "resources",
+          "type": "object"
+        },
+        "resourcesPreset": {
+          "default": "nano",
+          "description": "## Init container' resource requests and limits\n## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/\n## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).\n## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15\n##",
+          "title": "resourcesPreset",
+          "type": "string"
+        }
+      },
+      "description": "## Init containers parameters:\n## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the podSecurityContext section.\n##",
+      "title": "volumePermissions",
+      "type": "object"
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object"
+}
